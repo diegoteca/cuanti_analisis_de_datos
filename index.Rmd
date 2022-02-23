@@ -15,12 +15,14 @@ csl: chicago-fullnote-bibliography.csl
 
 # Presentación y objetivos del informe {.unnumbered}
 
-El siguiente informe tiene una finalidad principalmente pedagógica. Específicamente está pensado como un mecanismo para ayudar a alcanzar los siguientes objetivos que forman parte del [programa](https://docs.google.com/document/d/15ZuHJ1ZM7Z0g0Edt-mv1PCB697-x6-rZfcWdAtd85yM/edit#heading=h.s43n504lcmmx "programa de la materia") de la materia "Metodología y Técnicas Cuantitativas" de la UNAJ:
+El siguiente informe tiene una finalidad principalmente pedagógica. Específicamente está pensado como un mecanismo para ayudar a alcanzar los siguientes objetivos que forman parte del [programa](https://docs.google.com/document/d/15ZuHJ1ZM7Z0g0Edt-mv1PCB697-x6-rZfcWdAtd85yM/edit#heading=h.s43n504lcmmx "Ir al programa de la materia") de la materia "Metodología y Técnicas Cuantitativas" de la UNAJ:
 
 -   Lograr un conocimiento mínimo de la existencia y pertinencia de las técnicas de análisis de datos *básicas* y una *habilidad* mínima en la ejecución de las mismas.
 
 -   *Lograr un* conocimiento mínimo de la existencia y pertinencia de (otras) técnicas de análisis de datos más específicas y (usualmente) más *complejas*.
 
 Aparte de la distinción entre técnicas básicas y complejas la diferencia en cuanto a los objetivos pedagógicos es que entre ambos objetivos es que las últimas sólo se aspira a conocerlas mientras que en las primeras se espera, también, que se adquiera cierta habilidad en su ejecución. Expresado de otro modo, de las técnicas consideradas complejas se espera que se sepa de su existencia y qué tipos de problemas ayuda a solucionar. En cambio, en las técnicas básicas se espera lo anterior pero que además se adquiera la habilidad de poder ejecutar las mismas.
+
+Para lograr lo anterior durante la cursada de la materia se realiza una encuesta mediante un [formulario de google](https://www.google.com/intl/es-419_ar/forms/about/ "Ir a formularios de Google") que contestan los mismos estudiantes. Luego el contenido de sus respuestas se analiza con el [programa R](https://www.r-project.org/ "Ir al programa R") y con el mismo programa se escribe y publica este informe.
 
 En cuanto al estilo del texto, si bien van a encontrar citas y referencias, el mismo es deliberadamente informal.
