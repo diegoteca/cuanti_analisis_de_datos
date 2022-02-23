@@ -1,5 +1,5 @@
 ---
-title: "Análisis de datos. Posibilidades"
+title: "Diego Armando Datos"
 author: "Metodistas del Sur"
 date: "2022-02-23"
 site: bookdown::bookdown_site
@@ -13,7 +13,7 @@ biblio-style: apalike
 csl: chicago-fullnote-bibliography.csl
 ---
 
-# Presentacion y objetivos del informe {.unnumbered}
+# Presentación y objetivos del informe {.unnumbered}
 
 El siguiente informe tiene una finalidad principalmente pedagógica. Específicamente está pensado como un mecanismo para ayudar a alcanzar los siguientes objetivos que forman parte del [programa](https://docs.google.com/document/d/15ZuHJ1ZM7Z0g0Edt-mv1PCB697-x6-rZfcWdAtd85yM/edit#heading=h.s43n504lcmmx "programa de la materia") de la materia "Metodología y Técnicas Cuantitativas" de la UNAJ:
 

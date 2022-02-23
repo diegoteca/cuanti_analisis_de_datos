@@ -12,7 +12,7 @@ bookdown::bs4_book:
     code_font:
       google: "Roboto Mono"
   template: "bs4_book_es.html"
-  repo: https://github.com/diegoteca/diego_armando_datos # Tiene que ser repositorio abierto
+  repo: https://github.com/diegoteca/cuanti_analisis_de_datos/tree/main/_book # Tiene que ser repositorio abierto
   
   # Se puede especificar un template particualar
   # template = "default", donde se indica el path
