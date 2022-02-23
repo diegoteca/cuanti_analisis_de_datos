@@ -1,0 +1,34 @@
+# Acá se especifican las características de los diferentes outputs
+# Si se pone build book se crean todos los formatos que se detallan en este archivo
+
+# Bootstrap
+bookdown::bs4_book:
+  theme:
+    primary: "#3860b6" # "#096B72" es el original
+    base_font: 
+      google: "Lato"
+    heading_font:
+      google: "Open Sans"
+    code_font:
+      google: "Roboto Mono"
+  template: "bs4_book_es.html"
+  repo: https://github.com/diegoteca/diego_armando_datos # Tiene que ser repositorio abierto
+  
+  # Se puede especificar un template particualar
+  # template = "default", donde se indica el path
+  
+# Uso la libreria bslib para especificar más características del bs4_book
+# No hay que poner ni output ni bslib
+        
+# Otras cuestiones de lenguaje se modifica el template html
+# https://github.com/rstudio/bookdown/issues/1245
+  
+# PDF
+bookdown::pdf_book:
+  includes:
+    in_header: preamble.tex
+  latex_engine: xelatex
+  citation_package: natbib
+  keep_tex: yes
+# EPUB
+bookdown::epub_book: default

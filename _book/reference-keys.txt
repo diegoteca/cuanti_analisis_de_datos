@@ -1,0 +1,13 @@
+fig:nice-fig
+tab:nice-tab
+eq:binom
+cross
+parts
+footnotes
+citations
+blocks
+equations
+callout-blocks
+sharing-your-book
+publishing
+pages
