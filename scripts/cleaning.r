@@ -1,0 +1,246 @@
+# El objetivo de este script es descargar las respuestas del cuestionario
+
+# Librerías ----
+
+library(tidyverse)
+library(here)
+library(googlesheets4) # Específico para sheets
+library(googledrive) # Más general para googledrive
+library(janitor)
+library(lubridate)
+
+# Identificación ----
+
+i_am("informe_encuesta_cuanti_unaj/scripts/cleaning.r")
+
+# Identificación google drive
+
+drive_auth(email = "dquartullidocencia@gmail.com")
+
+# Link del cuestionario editable (sólo para tener a mano)
+
+# https://docs.google.com/forms/u/1/d/13mj2wN16HMaKtK0b0rbKEH4YyabCYZyO9P0qCoplisQ/edit?usp=send_form&usp=redirect_edit_m2
+
+# Descarga de archivo online ----
+
+url <- "https://docs.google.com/spreadsheets/d/1kVxZnwLGlkqMSWvsO5G93EfujElhP8ZToJs-ki0rhwo/edit?resourcekey#gid=1385801546"
+
+# Lo grabo en el equipo como copia de respaldo
+
+df_encuesta <- drive_download(url,
+                              here("informe_encuesta_cuanti_unaj", "descarga_original.xlsx"),
+                              overwrite = TRUE)
+
+# Leo el archivo online
+                    
+df_encuesta <- read_sheet(url) |>
+               clean_names()
+
+# Módulo Identificación ----
+
+df_encuesta <- df_encuesta |>
+               rename(dni = por_favor_podrias_ingresar_tu_dni,
+                      mail = direccion_de_correo_electronico) |>
+               relocate(marca_temporal, .after = last_col()) |>
+               relocate(dni) |>
+               mutate(dni = as.integer(dni))
+
+# Módulo Demográfico Individual ----
+
+df_encuesta <- df_encuesta |>
+               rename(sexo = indique_el_sexo_asignado_al_nacer,
+                      genero = identidad_de_genero_autopercibida_en_la_actualidad,
+                      fecha_nacimiento = indique_su_fecha_de_nacimiento,
+                      estado_civil = actualmente_usted_esta) |>
+               mutate(fecha_nacimiento = ymd(fecha_nacimiento))
+
+# Módulo Hogar, presencia de padres e hijes ----
+
+df_encuesta <- df_encuesta |>
+rename(hog_n_miembros_hogar = contandose_a_usted_mismo_cuantas_personas_viven_habitualmente_en_su_hogar_indique_un_numero,
+       hog_convivencia_padres = actualmente_vivis_con_algunos_de_tus_papas_mamas,
+       hog_convivencia_hijes = actualmente_tiene_hijes_conviviendo_con_usted)
+       
+# Módulo Cuidados del hogar. Niñes y adultos mayores
+
+df_encuesta <- df_encuesta |>
+rename(hog_n_menores_6 = de_esos_hijes_cuantos_tienen_menos_de_6_anos,
+       hog_dificultad_cuidados_menores_6 = habitualmente_tienen_dificultades_para_organizar_las_tareas_de_cuidado_de_sus_hijes,
+       hog_principal_dificultad_menores_6 = cuales_es_la_principal_dificultad_que_tienen_para_cuidar_a_les_nines_menores_de_6_anos,
+       hog_mayores_60 = actualmente_usted_tiene_adultos_mayores_mayores_de_60_anos_conviviendo_con_usted,
+       hog_dificultad_cuidados_mayores_60 = habitualmente_tienen_dificultades_para_organizar_las_tareas_de_cuidado_de_personas_adultas_mayores,
+       hog_principal_dificultad_mayores_60 = cuales_es_la_principal_dificultad_que_tienen_para_cuidar_a_los_adultos_mayores)
+
+# Módulo Vivienda
+
+df_encuesta <- df_encuesta |>
+rename(
+viv_calle = la_calle_de_tu_vivienda_es,
+viv_altura = el_numero_de_la_altura_de_la_calle_es,
+viv_partido = esa_vivienda_se_encuentra_en_el_partido_de,
+viv_basural = la_vivienda_esta_ubicada_cerca_de_basural_es_3_cuadras_o_menos,
+viv_inundable = la_vivienda_esta_ubicada_en_zona_inundable_en_los_ultimos_12_meses,
+viv_villa = la_vivienda_esta_ubicada_en_villa_de_emergencia_y_o_asentamiento,
+viv_tipo = su_vivienda_podria_ser_clasificada_como,
+viv_piso_interior = los_pisos_interiores_de_esa_vivienda_son_principalmente_de,
+viv_agua = el_agua_de_esa_vivienda_es_de,
+viv_bano = el_bano_tiene,
+viv_desague = el_desague_del_bano_es,
+viv_bano_compartido = el_bano_es_de,
+viv_n_ambientes = cuantos_ambientes_habitaciones_tiene_su_vivienda_excluyendo_cocina_bano_pasillos_lavadero_y_garage,
+viv_n_amb_dormir = de_esos_ambientes_cuantos_usan_habitualmente_para_dormir,
+viv_amb_estudio = utiliza_alguno_de_los_ambientes_de_la_vivienda_exclusivamente_como_lugar_de_estudio,
+viv_apropiada_estudio = en_general_consideras_que_tu_casa_es_un_espacio_apropiado_para_estudiar_en_tu_casa,
+viv_internet = en_esa_vivienda_tenes_acceso_a_internet_a_traves_de_algun_servicio_por_cable_wifi_etc_que_no_sea_el_plan_de_datos_de_un_celular,
+viv_n_celulares = por_favor_no_podrias_indicar_indicar_el_tipo_y_cantidad_de_dispositivos_tecnologicos_que_existen_en_esa_vivienda_celular_con_plan_de_datos_de_internet,
+viv_n_tablets = por_favor_no_podrias_indicar_indicar_el_tipo_y_cantidad_de_dispositivos_tecnologicos_que_existen_en_esa_vivienda_tablet,
+viv_n_notebook = por_favor_no_podrias_indicar_indicar_el_tipo_y_cantidad_de_dispositivos_tecnologicos_que_existen_en_esa_vivienda_notebook,
+viv_n_pc = por_favor_no_podrias_indicar_indicar_el_tipo_y_cantidad_de_dispositivos_tecnologicos_que_existen_en_esa_vivienda_pc_de_escritorio,
+viv_uso_cocina = para_cocinar_utiliza_principalmente,
+viv_relacion_legal = por_ultimo_este_hogar_es) |>
+relocate(c("viv_n_celulares",
+           "viv_n_tablets",
+           "viv_n_notebook",
+           "viv_n_pc"), .after = viv_internet) |>
+relocate(viv_bano_compartido, .after = viv_desague)
+
+# Módulo Uso del tiempo ----
+
+df_encuesta <- df_encuesta |>
+rename(tiempo_limpiar_casa = durante_la_semana_pasada_hizo_alguna_de_las_siguientes_actividades_de_la_casa_limpiar_y_ordenar_la_casa,
+tiempo_planchar = durante_la_semana_pasada_hizo_alguna_de_las_siguientes_actividades_de_la_casa_planchar,
+tiempo_comida = durante_la_semana_pasada_hizo_alguna_de_las_siguientes_actividades_de_la_casa_hacer_la_comida,
+tiempo_refaccion = durante_la_semana_pasada_hizo_alguna_de_las_siguientes_actividades_de_la_casa_tareas_de_construccion_o_refaccion_de_la_vivienda,
+tiempo_cuidado_menores = durante_la_semana_pasada_hizo_alguna_de_las_siguientes_actividades_de_la_casa_cuidar_a_los_as_nino_as_o_hermanos_as_menores,
+tiempo_cuidado_mayores = durante_la_semana_pasada_hizo_alguna_de_las_siguientes_actividades_de_la_casa_cuidar_a_discapacitados_o_adultos_mayores,
+tiempo_compras = durante_la_semana_pasada_hizo_alguna_de_las_siguientes_actividades_de_la_casa_hacer_las_compras) |>
+relocate(c("tiempo_limpiar_casa",
+           "tiempo_planchar",
+           "tiempo_comida",
+           "tiempo_refaccion",
+           "tiempo_cuidado_menores",
+           "tiempo_cuidado_mayores",
+           "tiempo_compras"), .after = viv_relacion_legal)
+
+# Módulo Inseguridad Alimentaria ----
+
+df_encuesta <- df_encuesta |>
+rename(
+seg_alim_preocupacion_falta_alimentos = usted_se_haya_preocupado_por_no_tener_suficientes_alimentos_para_comer_por_falta_de_dinero_u_otros_recursos,
+seg_alim_falta_alimentos_nutritivos = pensando_aun_en_los_ultimos_12_meses_hubo_alguna_vez_en_que_usted_no_haya_podido_comer_alimentos_saludables_y_nutritivos_por_falta_de_dinero_u_otros_recursos,
+seg_alim_poca_variedad = hubo_alguna_vez_en_que_usted_haya_comido_poca_variedad_de_alimentos_por_falta_de_dinero_u_otros_recursos,
+seg_alim_falta_una_comida = hubo_alguna_vez_en_que_usted_haya_tenido_que_dejar_de_desayunar_almorzar_o_cenar_porque_no_habia_suficiente_dinero_u_otros_recursos_para_obtener_alimentos,
+seg_alim_comer_menos = pensando_aun_en_los_ultimos_12_meses_hubo_alguna_vez_en_que_usted_haya_comido_menos_de_lo_que_pensaba_que_debia_comer_por_falta_de_dinero_u_otros_recursos,
+seg_alim_sin_alimentos_hogar = hubo_alguna_vez_en_que_su_hogar_se_haya_quedado_sin_alimentos_por_falta_de_dinero_u_otros_recursos,
+seg_alim_sentir_hambre = hubo_alguna_vez_en_que_usted_haya_sentido_hambre_pero_no_comio_porque_no_habia_suficiente_dinero_u_otros_recursos_para_obtener_alimentos,
+seg_alim_sin_comer_todo_un_dia = hubo_alguna_vez_en_que_usted_haya_dejado_de_comer_todo_un_dia_por_falta_de_dinero_u_otros_recursos
+)
+          
+# Módulo Preferencias Sociales ----
+
+df_encuesta <- df_encuesta |>
+rename(
+pref_soc_castigar_trato_injusto_personal = que_tan_dispuesto_esta_usted_a_castigar_a_alguien_que_lo_a_tratado_a_a_usted_injustamente_incluso_cuando_existan_riesgos_para_usted_de_sufrir_consecuencias_personales,
+pref_soc_castigar_trato_injusto_terceros = que_tan_dispuesto_a_esta_usted_a_castigar_a_alguien_que_trata_a_los_demas_injustamente_incluso_cuando_existan_riesgos_para_usted_de_sufrir_consecuencias_personales,
+pref_soc_donacion_benefica = que_tan_dispuesto_a_esta_usted_a_hacer_donaciones_a_causas_beneficas_sin_esperar_nada_a_cambio,
+pref_soc_devolucion_favores = cuando_alguien_me_hace_un_favor_estoy_dispuesto_a_devolverlo,
+pref_soc_revancha_injusto_personal = si_me_tratan_muy_injustamente_tomare_revancha_en_la_primera_ocasion_incluso_aunque_deba_pagar_un_costo_por_ello,
+pref_soc_creencia_buenas_inteciones = supongo_que_la_gente_tiene_solo_las_mejores_intenciones,
+pref_soc_extrano_obsequio = le_daria_al_extrano_uno_de_los_obsequios_como_agradecimiento,
+pref_soc_monto_donacion = imaginese_la_siguiente_situacion_hoy_de_forma_inesperada_usted_recibe_15_000_pesos_argentinos_que_cantidad_de_ese_monto_donaria_usted_a_una_buena_causa)
+
+# Módulo Origen Social -----
+
+df_encuesta <- df_encuesta |>
+rename(
+os_psh = cuando_usted_tenia_16_anos_quien_era_el_principal_sosten_de_su_hogar_psh_la_persona_que_realizaba_el_mayor_aporte_economico_al_hogar,
+os_psh_ne = cual_era_el_nivel_educativo_de_esa_persona,
+os_psh_ocupacion = cual_era_la_ocupacion_principal_de_esta_persona_cuando_usted_tenia_alrededor_de_16_anos,
+os_psh_tarea = que_tareas_hacia_esa_persona_en_ese_trabajo,
+os_psh_jerarquia = formaba_parte_del_empleo_del_psh_supervisar_el_trabajo_de_otros_o_decirles_que_hacer,
+os_psh_cat_ocup = en_ese_trabajo_esa_persona_era,
+os_psh_cant_trabajadores = incluido_el_psh_cuantas_personas_trabajaban_en_ese_establecimiento,
+os_conyuge = cuando_usted_tenia_16_anos_quien_era_el_conyuge_del_psh_de_su_hogar,
+os_conyuge_ne = cual_era_el_nivel_educativo_del_conyuge_del_psh)
+
+# Módulo Trabajo actual ----
+
+df_encuesta <- df_encuesta |>
+rename(
+trab_trabajo = entendiendo_por_trabajo_a_una_actividad_que_genera_bienes_o_servicios_para_el_mercado_y_que_se_recibe_a_cambio_dinero_o_especies_la_semana_pasada_usted_trabajo_por_lo_menos_una_hora,
+trab_busco = busco_trabajo_en_los_ultimos_30_dias_o_esta_tratando_de_ponerse_alguno_por_su_cuenta,
+trab_tiempo_busco = cuanto_hace_que_esta_en_la_situacion_anterior,
+trab_ocupacion = como_se_llama_la_ocupacion_de_la_que_usted_trabajo_la_semana_pasada,
+trab_tarea = que_tareas_realiza_en_ese_trabajo,
+trab_jerarquia = forma_parte_de_su_empleo_supervisar_el_trabajo_de_otros_o_decirles_que_hacer,
+trab_cat_ocup = en_ese_trabajo_usted_es,
+trab_cant_trabajadores = incluido_usted_cuantas_personas_trabajan_en_ese_establecimiento,
+trab_jubilacion = en_ese_trabajo,
+trab_vacaciones = en_ese_trabajo_usted_tiene_vacaciones_pagas,
+trab_obra_social = en_ese_trabajo_usted_tiene_obra_social_prepaga,
+trab_aguinaldo = en_ese_trabajo_usted_tiene_aguinaldo,
+trab_salario_familiar = en_ese_trabajo_usted_tiene_salario_familiar,
+trab_dias_enfermedad = en_ese_trabajo_usted_tiene_dias_pagos_por_enfermedad,
+trab_dias_estudio = en_ese_trabajo_usted_tiene_dias_por_estudio,
+trab_horas = por_ultimo_cuantas_horas_incluyendo_las_horas_extras_trabajo_usted_la_semana_pasada)
+
+# Módulo Ingresos del Hogar
+
+df_encuesta <- df_encuesta |>
+rename(
+ing_trabajo = teniendo_en_cuenta_no_solo_sus_propios_ingresos_sino_tambien_los_de_las_demas_personas_de_su_hogar_indique_cuales_de_los_siguientes_tipos_de_ingresos_tuvieron_en_su_hogar_durante_el_mes_pasado_lo_que_ganan_por_trabajo,
+ing_programas_empleo = teniendo_en_cuenta_no_solo_sus_propios_ingresos_sino_tambien_los_de_las_demas_personas_de_su_hogar_indique_cuales_de_los_siguientes_tipos_de_ingresos_tuvieron_en_su_hogar_durante_el_mes_pasado_programas_de_empleo,
+ing_jubilacion = teniendo_en_cuenta_no_solo_sus_propios_ingresos_sino_tambien_los_de_las_demas_personas_de_su_hogar_indique_cuales_de_los_siguientes_tipos_de_ingresos_tuvieron_en_su_hogar_durante_el_mes_pasado_jubilacion,
+ing_auh = teniendo_en_cuenta_no_solo_sus_propios_ingresos_sino_tambien_los_de_las_demas_personas_de_su_hogar_indique_cuales_de_los_siguientes_tipos_de_ingresos_tuvieron_en_su_hogar_durante_el_mes_pasado_asignacion_universal_por_hijo_auh,
+ing_pension = teniendo_en_cuenta_no_solo_sus_propios_ingresos_sino_tambien_los_de_las_demas_personas_de_su_hogar_indique_cuales_de_los_siguientes_tipos_de_ingresos_tuvieron_en_su_hogar_durante_el_mes_pasado_algun_otro_tipo_de_pension_especifica_7_hijos_invalidez_o_discapacidad_etc,
+ing_indenmizacion = teniendo_en_cuenta_no_solo_sus_propios_ingresos_sino_tambien_los_de_las_demas_personas_de_su_hogar_indique_cuales_de_los_siguientes_tipos_de_ingresos_tuvieron_en_su_hogar_durante_el_mes_pasado_indemnizacion_por_despido,
+ing_seguro_desempleo = teniendo_en_cuenta_no_solo_sus_propios_ingresos_sino_tambien_los_de_las_demas_personas_de_su_hogar_indique_cuales_de_los_siguientes_tipos_de_ingresos_tuvieron_en_su_hogar_durante_el_mes_pasado_seguro_de_desempleo,
+ing_alquiler = teniendo_en_cuenta_no_solo_sus_propios_ingresos_sino_tambien_los_de_las_demas_personas_de_su_hogar_indique_cuales_de_los_siguientes_tipos_de_ingresos_tuvieron_en_su_hogar_durante_el_mes_pasado_alquiler_de_una_propiedad,
+ing_beca = teniendo_en_cuenta_no_solo_sus_propios_ingresos_sino_tambien_los_de_las_demas_personas_de_su_hogar_indique_cuales_de_los_siguientes_tipos_de_ingresos_tuvieron_en_su_hogar_durante_el_mes_pasado_beca_de_estudios,
+ing_cuota_alimentaria = teniendo_en_cuenta_no_solo_sus_propios_ingresos_sino_tambien_los_de_las_demas_personas_de_su_hogar_indique_cuales_de_los_siguientes_tipos_de_ingresos_tuvieron_en_su_hogar_durante_el_mes_pasado_cuota_alimentaria,
+ing_n_aportantes = contandose_usted_el_mes_pasado_cuantas_personas_que_viven_en_este_hogar_aportaron_ingresos_monetarios,
+ing_totales = sumando_lo_aportado_por_todos_los_miembros_del_hogar_mas_lo_que_recibieron_de_otras_partes_como_ayudas_de_otras_personas_planes_sociales_seguro_de_desempleo_u_otros_ingresos_cuanto_fue_el_ingreso_en_dinero_total_del_hogar_el_mes_pasado)
+
+# Módulo Académico UNAJ ----
+
+df_encuesta <- df_encuesta |>
+rename(
+unaj_ano_ingreso = en_que_ano_ingresaste_a_la_unaj,
+unaj_estudios_anteriores = cursaste_estudios_terciarios_universitarios_antes_de_ingresar_al_unaj,
+unaj_n_materias_cursando = cuantas_materias_estas_cursando_este_cuatrimestre,
+unaj_periodo_lectivo = indica_tu_actual_periodo_lectivo_primer_o_el_segundo_cuatrimestre,
+unaj_ano_lectivo = indica_tu_actual_ano_lectivo,
+unaj_horas_estudio = pensando_en_este_cuatrimestre_cuantas_horas_semanales_incluyendo_las_horas_de_la_propia_cursada_le_estas_dedicando_en_promedio_al_estudio,
+unaj_n_materias_aprobadas = cuantas_materias_aprobadas_de_la_carrera_tenes,
+unaj_progresar = actualmente_sos_beneficiario_del_progresar) |>
+relocate(c("unaj_ano_lectivo",
+           "unaj_periodo_lectivo",
+           "unaj_horas_estudio"), .after = unaj_n_materias_cursando)
+
+# Módulo materia Metodología Cuantitativa
+
+df_encuesta <- df_encuesta |>
+rename(
+cuanti_docente = indica_el_docente_de_tu_comision,
+cuanti_1_palabra = primer_palabra,
+cuanti_2_palabra = segunda_palabra,
+cuanti_3_palabra = tercera_palabra)
+
+# Módulo Redes Sociales
+
+df_encuesta <- df_encuesta |>
+rename(
+redes_tu_nombre = por_favor_selecciona_tu_nombre_dentro_de_esta_lista,
+redes_1_contacto = selecciona_al_primer_estudiante,
+redes_2_contacto = selecciona_al_segundo_estudiante,
+redes_3_contacto = selecciona_al_tercer_estudiante,
+redes_4_contacto = selecciona_al_cuarto_estudiante,
+redes_5_contacto = selecciona_al_quinto_estudiante) |>
+relocate(redes_tu_nombre, .before = redes_1_contacto)
+
+# Grabo el archivo
+
+write_rds(df_encuesta,
+          here("informe_encuesta_cuanti_unaj", "df_encuesta.rds"))
+                  
+                  
