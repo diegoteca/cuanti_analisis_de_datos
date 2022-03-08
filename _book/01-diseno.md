@@ -4,7 +4,7 @@ En el diseño de la encuesta que contestan los estudiantes se pueden distinguir 
 
 ## Diseño del cuestionario
 
-El [cuestionario](https://forms.gle/ajosaQjtihgbsYYw8 "Ir al cuestionario"), como muchos cuestionarios que se usan en la práctica profesional, está diseñado con la lógica de módulos. Como veremos más adelante en esta instancia cada módulo tiene una justificable lógica interna pero lo que no tiene este cuestionario es una coherencia interna que explique la relación entre los diferentes módulos.
+El [cuestionario](https://drive.google.com/file/d/1nbU16-b2RxvPQZV2SS-Aodl1d7zPr9Cw/view?usp=sharing "Ir al cuestionario"), como muchos cuestionarios que se usan en la práctica profesional, está diseñado con la lógica de módulos. Como veremos más adelante en esta instancia cada módulo tiene una justificable lógica interna pero lo que no tiene este cuestionario es una coherencia interna que explique la relación entre los diferentes módulos.
 
 El diseño de un cuestionario mediante la estrategia de módulos suele ser útil tanto para el encuestado como para el investigador. Al encuestado lo ayuda a ordenarse visualmente especialmente si se trata de un cuestionario largo. Al investigador lo ayuda tanto para el etiquetamiento (o nombramiento) como para el orden de las variables en la base de datos.
 
