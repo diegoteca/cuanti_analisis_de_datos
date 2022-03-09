@@ -1,18 +1,99 @@
+# Limpieza y consistencia de los datos {#cross}
+
+El producto de los procesos de producción y registro de los datos es, precisamente, un dato. Este dato puede (y suele) contener diferentes tipos de errores por lo que se considera una buena práctica realizar un proceso de limpieza y preparación para recién después comenzar el proceso estricto del análisis de los datos.
+
+En esta sección veremos algunos ejemplos tanto de limpieza, consistencia y construcción de nuevas variables. Aquí veremos ejemplos de los casos mas sencillos. Procesos como el pegado (*joint*) de variables, necesario cuando los datos se encuentran en diferentes archivos, no se verán.
+
+## Limpieza
+
+La idea de limpieza (*cleaning*) viene de usar la metáfora de dato sucio (*dirty*). Un dato sucio no necesariamente es un dato incorrecto aunque sí se trata de un tipo de dato incómodo ya que dificulta el posterior análisis.
+
+La tarea básica de limpieza (*cleaning*) que se hará será el remombre de todas las variables. La razón de esta operación es que, al menos si se trabaja con google forms, los nombres de las variables son el texto de la propia pregunta del formulario. Esto incomoda un poco el análisis de los datos por la gran extensión de algunas preguntas y por lo problemático que a veces puede ser tener espacios en blanco en los nombres de las variables.
+
+``` rmdcaution
+::: {.rmdcaution} The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.:::
+```
+
+bdfb
+
+``` rmdimportant
+ ::: {.rmdimportant}
+The `bs4_book` style also includes an callout block
+like this one.
+:::
+```
+
+holis
+
+``` rmdtip
+ ::: {.rmdtip}
+The `bs4_book` style also includes an  callout block
+like this one.
+:::
+```
+
+holis
+
+``` rmdwaring
+ :::.rmdwarning
+The `bs4_book` style also includes an callout block
+like this one.
+:::
+```
+
+\BeginKnitrBlock{rmdtip}<div class="rmdtip">Reproducibility is a major advantage of command-line interfaces, but </div>\EndKnitrBlock{rmdtip}
+
+``` rmdnote
+:::{type='rmdnote'}
+The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.
+
+:::
+```
+
+
+```{.r .fold-show}
 # El objetivo de este script es descargar las respuestas del cuestionario
 
 # Librerías ----
 
 library(tidyverse) # Uso general
+#> -- Attaching packages ------------------- tidyverse 1.3.1 --
+#> v ggplot2 3.3.5     v purrr   0.3.4
+#> v tibble  3.1.6     v dplyr   1.0.8
+#> v tidyr   1.2.0     v stringr 1.4.0
+#> v readr   2.1.2     v forcats 0.5.1
+#> -- Conflicts ---------------------- tidyverse_conflicts() --
+#> x dplyr::filter() masks stats::filter()
+#> x dplyr::lag()    masks stats::lag()
 library(here) # Mejora la replicabilidad en diferentes computadoras
+#> here() starts at C:/Users/dquar/OneDrive/Documentos/R-Studio Projects/cuanti_analisis_de_datos
 library(googlesheets4) # Específico para googlesheet
 library(googledrive) # Más general para googledrive
+#> 
+#> Attaching package: 'googledrive'
+#> The following objects are masked from 'package:googlesheets4':
+#> 
+#>     request_generate, request_make
 library(janitor) # Específico para limpieza y exploración
+#> 
+#> Attaching package: 'janitor'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     chisq.test, fisher.test
 library(lubridate) # Manejo de tiempos fechas
+#> 
+#> Attaching package: 'lubridate'
+#> The following objects are masked from 'package:base':
+#> 
+#>     date, intersect, setdiff, union
 library(readxl) # Lectura de archivos excel
 
 # Identificación ----
 
 i_am("scripts/cleaning.r")
+#> here() starts at C:/Users/dquar/OneDrive/Documentos/R-Studio Projects/cuanti_analisis_de_datos
 
 # Identificación google drive
 
@@ -31,11 +112,20 @@ url <- "https://docs.google.com/spreadsheets/d/1kVxZnwLGlkqMSWvsO5G93EfujElhP8ZT
 drive_download(url,
                here("Inputs", "descarga_original.xlsx"),
                overwrite = TRUE)
+#> File downloaded:
+#> * 'Cuestionario Cuanti UNAJ (respuestas)'
+#>   <id: 1kVxZnwLGlkqMSWvsO5G93EfujElhP8ZToJs-ki0rhwo>
+#> Saved locally as:
+#> * 'C:/Users/dquar/OneDrive/Documentos/R-Studio Projects/cuanti_analisis_de_datos/Inputs/descarga_original.xlsx'
 
 # Leo el archivo online y comienzo la corrección de los nombres de las variables
                     
 df_encuesta <- read_xlsx(here("Inputs", "descarga_original.xlsx")) |>
                clean_names()
+#> New names:
+#> * `` -> ...100
+#> * `` -> ...127
+#> * `` -> ...128
 
 # Módulo Identificación ----
 
@@ -54,6 +144,7 @@ df_encuesta <- df_encuesta |>
                       fecha_nacimiento = indique_su_fecha_de_nacimiento,
                       estado_civil = actualmente_usted_esta) |>
                mutate(fecha_nacimiento = ymd(fecha_nacimiento))
+#> Warning: All formats failed to parse. No formats found.
 
 # M?dulo Hogar, presencia de padres e hijes ----
 
@@ -245,3 +336,4 @@ write_rds(df_encuesta,
           here("Outputs","df_encuesta.rds"))
                   
                   
+```

@@ -117,7 +117,7 @@
 
 \title{Diego Armando Datos}
 \author{Metodistas del Sur}
-\date{2022-03-08}
+\date{2022-03-09}
 
 \usepackage{amsthm}
 \newtheorem{theorem}{Teorema}[chapter]
@@ -160,7 +160,16 @@ Aparte de la distinción entre técnicas básicas y complejas la diferencia en c
 
 Para lograr lo anterior durante la cursada de la materia se realiza una encuesta mediante un \href{https://www.google.com/intl/es-419_ar/forms/about/}{formulario de google} que contestan los mismos estudiantes. Luego el contenido de sus respuestas se analiza con el \href{https://www.r-project.org/}{programa R} y con el mismo programa se escribe y publica este informe.
 
-En cuanto al estilo del texto, si bien van a encontrar citas y referencias, el mismo es deliberadamente informal.
+En cuanto al estilo del texto será deliberamente informal aunque con 3 excepciones con fines principalmente pedagógicos:
+
+\begin{itemize}
+\item
+  Se incluirán piezas de código
+\item
+  Se hará uso de citas y referencias (estilo APA)
+\item
+  Los conceptos importantes apareceran traducidos al ingles entre paréntesis.
+\end{itemize}
 
 \hypertarget{diseuxf1o-de-la-encuesta}{%
 \chapter{Diseño de la encuesta}\label{diseuxf1o-de-la-encuesta}}
@@ -227,94 +236,358 @@ Antes que nada, si bien es una encuesta que potencialmente les llega a todos los
 \end{itemize}
 
 \hypertarget{cross}{%
-\chapter{Cross-references}\label{cross}}
+\chapter{Limpieza y consistencia de los datos}\label{cross}}
 
-Cross-references make it easier for your readers to find and link to elements in your book.
+El producto de los procesos de producción y registro de los datos es, precisamente, un dato. Este dato puede (y suele) contener diferentes tipos de errores por lo que se considera una buena práctica realizar un proceso de limpieza y preparación para recién después comenzar el proceso estricto del análisis de los datos.
 
-\hypertarget{chapters-and-sub-chapters}{%
-\section{Chapters and sub-chapters}\label{chapters-and-sub-chapters}}
+En esta sección veremos algunos ejemplos tanto de limpieza, consistencia y construcción de nuevas variables. Aquí veremos ejemplos de los casos mas sencillos. Procesos como el pegado (\emph{joint}) de variables, necesario cuando los datos se encuentran en diferentes archivos, no se verán.
 
-There are two steps to cross-reference any heading:
+\hypertarget{limpieza}{%
+\section{Limpieza}\label{limpieza}}
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Label the heading: \texttt{\#\ Hello\ world\ \{\#nice-label\}}.
+La idea de limpieza (\emph{cleaning}) viene de usar la metáfora de dato sucio (\emph{dirty}). Un dato sucio no necesariamente es un dato incorrecto aunque sí se trata de un tipo de dato incómodo ya que dificulta el posterior análisis.
 
-  \begin{itemize}
-  \tightlist
-  \item
-    Leave the label off if you like the automated heading generated based on your heading title: for example, \texttt{\#\ Hello\ world} = \texttt{\#\ Hello\ world\ \{\#hello-world\}}.
-  \item
-    To label an un-numbered heading, use: \texttt{\#\ Hello\ world\ \{-\#nice-label\}} or \texttt{\{\#\ Hello\ world\ .unnumbered\}}.
-  \end{itemize}
-\item
-  Next, reference the labeled heading anywhere in the text using \texttt{\textbackslash{}@ref(nice-label)}; for example, please see Chapter \ref{cross}.
+La tarea básica de limpieza (\emph{cleaning}) que se hará será el remombre de todas las variables. La razón de esta operación es que, al menos si se trabaja con google forms, los nombres de las variables son el texto de la propia pregunta del formulario. Esto incomoda un poco el análisis de los datos por la gran extensión de algunas preguntas y por lo problemático que a veces puede ser tener espacios en blanco en los nombres de las variables.
 
-  \begin{itemize}
-  \tightlist
-  \item
-    If you prefer text as the link instead of a numbered reference use: \protect\hyperlink{cross}{any text you want can go here}.
-  \end{itemize}
-\end{enumerate}
+\begin{verbatim}
+::: {.rmdcaution}
+The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.
+:::
+\end{verbatim}
 
-\hypertarget{captioned-figures-and-tables}{%
-\section{Captioned figures and tables}\label{captioned-figures-and-tables}}
+bdfb
 
-Figures and tables \emph{with captions} can also be cross-referenced from elsewhere in your book using \texttt{\textbackslash{}@ref(fig:chunk-label)} and \texttt{\textbackslash{}@ref(tab:chunk-label)}, respectively.
+\begin{verbatim}
+ ::: {.rmdimportant}
+The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.
+:::
+\end{verbatim}
 
-See Figure \ref{fig:nice-fig}.
+holis
+
+\begin{verbatim}
+ ::: {.rmdtip}
+The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.
+:::
+\end{verbatim}
+
+holis
+
+\begin{verbatim}
+ ::: {.rmdwarning}
+The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.
+:::
+\end{verbatim}
+
+holis
+
+\begin{verbatim}
+ ::: {.rmdnote}
+The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.
+:::
+\end{verbatim}
+
+holis
+
+\begin{verbatim}
+::: {.rmdnote}
+The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.
+
+:::
+\end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, .}\DecValTok{1}\NormalTok{, .}\DecValTok{1}\NormalTok{))}
-\FunctionTok{plot}\NormalTok{(pressure, }\AttributeTok{type =} \StringTok{\textquotesingle{}b\textquotesingle{}}\NormalTok{, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\CommentTok{\# El objetivo de este script es descargar las respuestas del cuestionario}
 
-\begin{figure}
+\CommentTok{\# Librerías {-}{-}{-}{-}}
 
-{\centering \includegraphics[width=0.8\linewidth]{02-cross-refs_files/figure-latex/nice-fig-1} 
+\FunctionTok{library}\NormalTok{(tidyverse) }\CommentTok{\# Uso general}
+\CommentTok{\#\textgreater{} {-}{-} Attaching packages {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} tidyverse 1.3.1 {-}{-}}
+\CommentTok{\#\textgreater{} v ggplot2 3.3.5     v purrr   0.3.4}
+\CommentTok{\#\textgreater{} v tibble  3.1.6     v dplyr   1.0.8}
+\CommentTok{\#\textgreater{} v tidyr   1.2.0     v stringr 1.4.0}
+\CommentTok{\#\textgreater{} v readr   2.1.2     v forcats 0.5.1}
+\CommentTok{\#\textgreater{} {-}{-} Conflicts {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} tidyverse\_conflicts() {-}{-}}
+\CommentTok{\#\textgreater{} x dplyr::filter() masks stats::filter()}
+\CommentTok{\#\textgreater{} x dplyr::lag()    masks stats::lag()}
+\FunctionTok{library}\NormalTok{(here) }\CommentTok{\# Mejora la replicabilidad en diferentes computadoras}
+\CommentTok{\#\textgreater{} here() starts at C:/Users/dquar/OneDrive/Documentos/R{-}Studio Projects/cuanti\_analisis\_de\_datos}
+\FunctionTok{library}\NormalTok{(googlesheets4) }\CommentTok{\# Específico para googlesheet}
+\FunctionTok{library}\NormalTok{(googledrive) }\CommentTok{\# Más general para googledrive}
+\CommentTok{\#\textgreater{} }
+\CommentTok{\#\textgreater{} Attaching package: \textquotesingle{}googledrive\textquotesingle{}}
+\CommentTok{\#\textgreater{} The following objects are masked from \textquotesingle{}package:googlesheets4\textquotesingle{}:}
+\CommentTok{\#\textgreater{} }
+\CommentTok{\#\textgreater{}     request\_generate, request\_make}
+\FunctionTok{library}\NormalTok{(janitor) }\CommentTok{\# Específico para limpieza y exploración}
+\CommentTok{\#\textgreater{} }
+\CommentTok{\#\textgreater{} Attaching package: \textquotesingle{}janitor\textquotesingle{}}
+\CommentTok{\#\textgreater{} The following objects are masked from \textquotesingle{}package:stats\textquotesingle{}:}
+\CommentTok{\#\textgreater{} }
+\CommentTok{\#\textgreater{}     chisq.test, fisher.test}
+\FunctionTok{library}\NormalTok{(lubridate) }\CommentTok{\# Manejo de tiempos fechas}
+\CommentTok{\#\textgreater{} }
+\CommentTok{\#\textgreater{} Attaching package: \textquotesingle{}lubridate\textquotesingle{}}
+\CommentTok{\#\textgreater{} The following objects are masked from \textquotesingle{}package:base\textquotesingle{}:}
+\CommentTok{\#\textgreater{} }
+\CommentTok{\#\textgreater{}     date, intersect, setdiff, union}
+\FunctionTok{library}\NormalTok{(readxl) }\CommentTok{\# Lectura de archivos excel}
 
-}
+\CommentTok{\# Identificación {-}{-}{-}{-}}
 
-\caption{Here is a nice figure!}\label{fig:nice-fig}
-\end{figure}
+\FunctionTok{i\_am}\NormalTok{(}\StringTok{"scripts/cleaning.r"}\NormalTok{)}
+\CommentTok{\#\textgreater{} here() starts at C:/Users/dquar/OneDrive/Documentos/R{-}Studio Projects/cuanti\_analisis\_de\_datos}
 
-Don't miss Table \ref{tab:nice-tab}.
+\CommentTok{\# Identificación google drive}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(}
-  \FunctionTok{head}\NormalTok{(pressure, }\DecValTok{10}\NormalTok{), }\AttributeTok{caption =} \StringTok{\textquotesingle{}Here is a nice table!\textquotesingle{}}\NormalTok{,}
-  \AttributeTok{booktabs =} \ConstantTok{TRUE}
+\FunctionTok{drive\_auth}\NormalTok{(}\AttributeTok{email =} \StringTok{"dquartullidocencia@gmail.com"}\NormalTok{)}
+
+\CommentTok{\# Link del cuestionario editable (sólo para tener a mano)}
+
+\CommentTok{\# https://docs.google.com/forms/u/1/d/13mj2wN16HMaKtK0b0rbKEH4YyabCYZyO9P0qCoplisQ/edit?usp=send\_form\&usp=redirect\_edit\_m2}
+
+\CommentTok{\# Descarga de archivo online {-}{-}{-}{-}}
+
+\NormalTok{url }\OtherTok{\textless{}{-}} \StringTok{"https://docs.google.com/spreadsheets/d/1kVxZnwLGlkqMSWvsO5G93EfujElhP8ZToJs{-}ki0rhwo/edit?resourcekey\#gid=1385801546"}
+
+\CommentTok{\# Lo grabo en el equipo como copia de respaldo}
+
+\FunctionTok{drive\_download}\NormalTok{(url,}
+               \FunctionTok{here}\NormalTok{(}\StringTok{"Inputs"}\NormalTok{, }\StringTok{"descarga\_original.xlsx"}\NormalTok{),}
+               \AttributeTok{overwrite =} \ConstantTok{TRUE}\NormalTok{)}
+\CommentTok{\#\textgreater{} File downloaded:}
+\CommentTok{\#\textgreater{} * \textquotesingle{}Cuestionario Cuanti UNAJ (respuestas)\textquotesingle{}}
+\CommentTok{\#\textgreater{}   \textless{}id: 1kVxZnwLGlkqMSWvsO5G93EfujElhP8ZToJs{-}ki0rhwo\textgreater{}}
+\CommentTok{\#\textgreater{} Saved locally as:}
+\CommentTok{\#\textgreater{} * \textquotesingle{}C:/Users/dquar/OneDrive/Documentos/R{-}Studio Projects/cuanti\_analisis\_de\_datos/Inputs/descarga\_original.xlsx\textquotesingle{}}
+
+\CommentTok{\# Leo el archivo online y comienzo la corrección de los nombres de las variables}
+                    
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}} \FunctionTok{read\_xlsx}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"Inputs"}\NormalTok{, }\StringTok{"descarga\_original.xlsx"}\NormalTok{)) }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+               \FunctionTok{clean\_names}\NormalTok{()}
+\CommentTok{\#\textgreater{} New names:}
+\CommentTok{\#\textgreater{} * \textasciigrave{}\textasciigrave{} {-}\textgreater{} ...100}
+\CommentTok{\#\textgreater{} * \textasciigrave{}\textasciigrave{} {-}\textgreater{} ...127}
+\CommentTok{\#\textgreater{} * \textasciigrave{}\textasciigrave{} {-}\textgreater{} ...128}
+
+\CommentTok{\# Módulo Identificación {-}{-}{-}{-}}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+               \FunctionTok{rename}\NormalTok{(}\AttributeTok{dni =}\NormalTok{ por\_favor\_podrias\_ingresar\_tu\_dni,}
+                      \AttributeTok{mail =}\NormalTok{ direccion\_de\_correo\_electronico) }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+               \FunctionTok{relocate}\NormalTok{(marca\_temporal, }\AttributeTok{.after =} \FunctionTok{last\_col}\NormalTok{()) }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+               \FunctionTok{relocate}\NormalTok{(dni) }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+               \FunctionTok{mutate}\NormalTok{(}\AttributeTok{dni =} \FunctionTok{as.integer}\NormalTok{(dni))}
+
+\CommentTok{\# M?dulo Demogr?fico Individual {-}{-}{-}{-}}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+               \FunctionTok{rename}\NormalTok{(}\AttributeTok{sexo =}\NormalTok{ indique\_el\_sexo\_asignado\_al\_nacer,}
+                      \AttributeTok{genero =}\NormalTok{ identidad\_de\_genero\_autopercibida\_en\_la\_actualidad,}
+                      \AttributeTok{fecha\_nacimiento =}\NormalTok{ indique\_su\_fecha\_de\_nacimiento,}
+                      \AttributeTok{estado\_civil =}\NormalTok{ actualmente\_usted\_esta) }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+               \FunctionTok{mutate}\NormalTok{(}\AttributeTok{fecha\_nacimiento =} \FunctionTok{ymd}\NormalTok{(fecha\_nacimiento))}
+\CommentTok{\#\textgreater{} Warning: All formats failed to parse. No formats found.}
+
+\CommentTok{\# M?dulo Hogar, presencia de padres e hijes {-}{-}{-}{-}}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{rename}\NormalTok{(}\AttributeTok{hog\_n\_miembros\_hogar =}\NormalTok{ contandose\_a\_usted\_mismo\_cuantas\_personas\_viven\_habitualmente\_en\_su\_hogar\_indique\_un\_numero,}
+       \AttributeTok{hog\_convivencia\_padres =}\NormalTok{ actualmente\_vivis\_con\_algunos\_de\_tus\_papas\_mamas,}
+       \AttributeTok{hog\_convivencia\_hijes =}\NormalTok{ actualmente\_tiene\_hijes\_conviviendo\_con\_usted)}
+       
+\CommentTok{\# M?dulo Cuidados del hogar. Ni?es y adultos mayores}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{rename}\NormalTok{(}\AttributeTok{hog\_n\_menores\_6 =}\NormalTok{ de\_esos\_hijes\_cuantos\_tienen\_menos\_de\_6\_anos,}
+       \AttributeTok{hog\_dificultad\_cuidados\_menores\_6 =}\NormalTok{ habitualmente\_tienen\_dificultades\_para\_organizar\_las\_tareas\_de\_cuidado\_de\_sus\_hijes,}
+       \AttributeTok{hog\_principal\_dificultad\_menores\_6 =}\NormalTok{ cuales\_es\_la\_principal\_dificultad\_que\_tienen\_para\_cuidar\_a\_les\_nines\_menores\_de\_6\_anos,}
+       \AttributeTok{hog\_mayores\_60 =}\NormalTok{ actualmente\_usted\_tiene\_adultos\_mayores\_mayores\_de\_60\_anos\_conviviendo\_con\_usted,}
+       \AttributeTok{hog\_dificultad\_cuidados\_mayores\_60 =}\NormalTok{ habitualmente\_tienen\_dificultades\_para\_organizar\_las\_tareas\_de\_cuidado\_de\_personas\_adultas\_mayores,}
+       \AttributeTok{hog\_principal\_dificultad\_mayores\_60 =}\NormalTok{ cuales\_es\_la\_principal\_dificultad\_que\_tienen\_para\_cuidar\_a\_los\_adultos\_mayores)}
+
+\CommentTok{\# M?dulo Vivienda}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{rename}\NormalTok{(}
+\AttributeTok{viv\_calle =}\NormalTok{ la\_calle\_de\_tu\_vivienda\_es,}
+\AttributeTok{viv\_altura =}\NormalTok{ el\_numero\_de\_la\_altura\_de\_la\_calle\_es,}
+\AttributeTok{viv\_partido =}\NormalTok{ esa\_vivienda\_se\_encuentra\_en\_el\_partido\_de,}
+\AttributeTok{viv\_basural =}\NormalTok{ la\_vivienda\_esta\_ubicada\_cerca\_de\_basural\_es\_3\_cuadras\_o\_menos,}
+\AttributeTok{viv\_inundable =}\NormalTok{ la\_vivienda\_esta\_ubicada\_en\_zona\_inundable\_en\_los\_ultimos\_12\_meses,}
+\AttributeTok{viv\_villa =}\NormalTok{ la\_vivienda\_esta\_ubicada\_en\_villa\_de\_emergencia\_y\_o\_asentamiento,}
+\AttributeTok{viv\_tipo =}\NormalTok{ su\_vivienda\_podria\_ser\_clasificada\_como,}
+\AttributeTok{viv\_piso\_interior =}\NormalTok{ los\_pisos\_interiores\_de\_esa\_vivienda\_son\_principalmente\_de,}
+\AttributeTok{viv\_agua =}\NormalTok{ el\_agua\_de\_esa\_vivienda\_es\_de,}
+\AttributeTok{viv\_bano =}\NormalTok{ el\_bano\_tiene,}
+\AttributeTok{viv\_desague =}\NormalTok{ el\_desague\_del\_bano\_es,}
+\AttributeTok{viv\_bano\_compartido =}\NormalTok{ el\_bano\_es\_de,}
+\AttributeTok{viv\_n\_ambientes =}\NormalTok{ cuantos\_ambientes\_habitaciones\_tiene\_su\_vivienda\_excluyendo\_cocina\_bano\_pasillos\_lavadero\_y\_garage,}
+\AttributeTok{viv\_n\_amb\_dormir =}\NormalTok{ de\_esos\_ambientes\_cuantos\_usan\_habitualmente\_para\_dormir,}
+\AttributeTok{viv\_amb\_estudio =}\NormalTok{ utiliza\_alguno\_de\_los\_ambientes\_de\_la\_vivienda\_exclusivamente\_como\_lugar\_de\_estudio,}
+\AttributeTok{viv\_apropiada\_estudio =}\NormalTok{ en\_general\_consideras\_que\_tu\_casa\_es\_un\_espacio\_apropiado\_para\_estudiar\_en\_tu\_casa,}
+\AttributeTok{viv\_internet =}\NormalTok{ en\_esa\_vivienda\_tenes\_acceso\_a\_internet\_a\_traves\_de\_algun\_servicio\_por\_cable\_wifi\_etc\_que\_no\_sea\_el\_plan\_de\_datos\_de\_un\_celular,}
+\AttributeTok{viv\_n\_celulares =}\NormalTok{ por\_favor\_no\_podrias\_indicar\_indicar\_el\_tipo\_y\_cantidad\_de\_dispositivos\_tecnologicos\_que\_existen\_en\_esa\_vivienda\_celular\_con\_plan\_de\_datos\_de\_internet,}
+\AttributeTok{viv\_n\_tablets =}\NormalTok{ por\_favor\_no\_podrias\_indicar\_indicar\_el\_tipo\_y\_cantidad\_de\_dispositivos\_tecnologicos\_que\_existen\_en\_esa\_vivienda\_tablet,}
+\AttributeTok{viv\_n\_notebook =}\NormalTok{ por\_favor\_no\_podrias\_indicar\_indicar\_el\_tipo\_y\_cantidad\_de\_dispositivos\_tecnologicos\_que\_existen\_en\_esa\_vivienda\_notebook,}
+\AttributeTok{viv\_n\_pc =}\NormalTok{ por\_favor\_no\_podrias\_indicar\_indicar\_el\_tipo\_y\_cantidad\_de\_dispositivos\_tecnologicos\_que\_existen\_en\_esa\_vivienda\_pc\_de\_escritorio,}
+\AttributeTok{viv\_uso\_cocina =}\NormalTok{ para\_cocinar\_utiliza\_principalmente,}
+\AttributeTok{viv\_relacion\_legal =}\NormalTok{ por\_ultimo\_este\_hogar\_es) }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{relocate}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"viv\_n\_celulares"}\NormalTok{,}
+           \StringTok{"viv\_n\_tablets"}\NormalTok{,}
+           \StringTok{"viv\_n\_notebook"}\NormalTok{,}
+           \StringTok{"viv\_n\_pc"}\NormalTok{), }\AttributeTok{.after =}\NormalTok{ viv\_internet) }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{relocate}\NormalTok{(viv\_bano\_compartido, }\AttributeTok{.after =}\NormalTok{ viv\_desague)}
+
+\CommentTok{\# M?dulo Uso del tiempo {-}{-}{-}{-}}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{rename}\NormalTok{(}\AttributeTok{tiempo\_limpiar\_casa =}\NormalTok{ durante\_la\_semana\_pasada\_hizo\_alguna\_de\_las\_siguientes\_actividades\_de\_la\_casa\_limpiar\_y\_ordenar\_la\_casa,}
+\AttributeTok{tiempo\_planchar =}\NormalTok{ durante\_la\_semana\_pasada\_hizo\_alguna\_de\_las\_siguientes\_actividades\_de\_la\_casa\_planchar,}
+\AttributeTok{tiempo\_comida =}\NormalTok{ durante\_la\_semana\_pasada\_hizo\_alguna\_de\_las\_siguientes\_actividades\_de\_la\_casa\_hacer\_la\_comida,}
+\AttributeTok{tiempo\_refaccion =}\NormalTok{ durante\_la\_semana\_pasada\_hizo\_alguna\_de\_las\_siguientes\_actividades\_de\_la\_casa\_tareas\_de\_construccion\_o\_refaccion\_de\_la\_vivienda,}
+\AttributeTok{tiempo\_cuidado\_menores =}\NormalTok{ durante\_la\_semana\_pasada\_hizo\_alguna\_de\_las\_siguientes\_actividades\_de\_la\_casa\_cuidar\_a\_los\_as\_nino\_as\_o\_hermanos\_as\_menores,}
+\AttributeTok{tiempo\_cuidado\_mayores =}\NormalTok{ durante\_la\_semana\_pasada\_hizo\_alguna\_de\_las\_siguientes\_actividades\_de\_la\_casa\_cuidar\_a\_discapacitados\_o\_adultos\_mayores,}
+\AttributeTok{tiempo\_compras =}\NormalTok{ durante\_la\_semana\_pasada\_hizo\_alguna\_de\_las\_siguientes\_actividades\_de\_la\_casa\_hacer\_las\_compras) }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{relocate}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"tiempo\_limpiar\_casa"}\NormalTok{,}
+           \StringTok{"tiempo\_planchar"}\NormalTok{,}
+           \StringTok{"tiempo\_comida"}\NormalTok{,}
+           \StringTok{"tiempo\_refaccion"}\NormalTok{,}
+           \StringTok{"tiempo\_cuidado\_menores"}\NormalTok{,}
+           \StringTok{"tiempo\_cuidado\_mayores"}\NormalTok{,}
+           \StringTok{"tiempo\_compras"}\NormalTok{), }\AttributeTok{.after =}\NormalTok{ viv\_relacion\_legal)}
+
+\CommentTok{\# M?dulo Inseguridad Alimentaria {-}{-}{-}{-}}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{rename}\NormalTok{(}
+\AttributeTok{seg\_alim\_preocupacion\_falta\_alimentos =}\NormalTok{ usted\_se\_haya\_preocupado\_por\_no\_tener\_suficientes\_alimentos\_para\_comer\_por\_falta\_de\_dinero\_u\_otros\_recursos,}
+\AttributeTok{seg\_alim\_falta\_alimentos\_nutritivos =}\NormalTok{ pensando\_aun\_en\_los\_ultimos\_12\_meses\_hubo\_alguna\_vez\_en\_que\_usted\_no\_haya\_podido\_comer\_alimentos\_saludables\_y\_nutritivos\_por\_falta\_de\_dinero\_u\_otros\_recursos,}
+\AttributeTok{seg\_alim\_poca\_variedad =}\NormalTok{ hubo\_alguna\_vez\_en\_que\_usted\_haya\_comido\_poca\_variedad\_de\_alimentos\_por\_falta\_de\_dinero\_u\_otros\_recursos,}
+\AttributeTok{seg\_alim\_falta\_una\_comida =}\NormalTok{ hubo\_alguna\_vez\_en\_que\_usted\_haya\_tenido\_que\_dejar\_de\_desayunar\_almorzar\_o\_cenar\_porque\_no\_habia\_suficiente\_dinero\_u\_otros\_recursos\_para\_obtener\_alimentos,}
+\AttributeTok{seg\_alim\_comer\_menos =}\NormalTok{ pensando\_aun\_en\_los\_ultimos\_12\_meses\_hubo\_alguna\_vez\_en\_que\_usted\_haya\_comido\_menos\_de\_lo\_que\_pensaba\_que\_debia\_comer\_por\_falta\_de\_dinero\_u\_otros\_recursos,}
+\AttributeTok{seg\_alim\_sin\_alimentos\_hogar =}\NormalTok{ hubo\_alguna\_vez\_en\_que\_su\_hogar\_se\_haya\_quedado\_sin\_alimentos\_por\_falta\_de\_dinero\_u\_otros\_recursos,}
+\AttributeTok{seg\_alim\_sentir\_hambre =}\NormalTok{ hubo\_alguna\_vez\_en\_que\_usted\_haya\_sentido\_hambre\_pero\_no\_comio\_porque\_no\_habia\_suficiente\_dinero\_u\_otros\_recursos\_para\_obtener\_alimentos,}
+\AttributeTok{seg\_alim\_sin\_comer\_todo\_un\_dia =}\NormalTok{ hubo\_alguna\_vez\_en\_que\_usted\_haya\_dejado\_de\_comer\_todo\_un\_dia\_por\_falta\_de\_dinero\_u\_otros\_recursos}
 \NormalTok{)}
+          
+\CommentTok{\# M?dulo Preferencias Sociales {-}{-}{-}{-}}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{rename}\NormalTok{(}
+\AttributeTok{pref\_soc\_castigar\_trato\_injusto\_personal =}\NormalTok{ que\_tan\_dispuesto\_esta\_usted\_a\_castigar\_a\_alguien\_que\_lo\_a\_tratado\_a\_a\_usted\_injustamente\_incluso\_cuando\_existan\_riesgos\_para\_usted\_de\_sufrir\_consecuencias\_personales,}
+\AttributeTok{pref\_soc\_castigar\_trato\_injusto\_terceros =}\NormalTok{ que\_tan\_dispuesto\_a\_esta\_usted\_a\_castigar\_a\_alguien\_que\_trata\_a\_los\_demas\_injustamente\_incluso\_cuando\_existan\_riesgos\_para\_usted\_de\_sufrir\_consecuencias\_personales,}
+\AttributeTok{pref\_soc\_donacion\_benefica =}\NormalTok{ que\_tan\_dispuesto\_a\_esta\_usted\_a\_hacer\_donaciones\_a\_causas\_beneficas\_sin\_esperar\_nada\_a\_cambio,}
+\AttributeTok{pref\_soc\_devolucion\_favores =}\NormalTok{ cuando\_alguien\_me\_hace\_un\_favor\_estoy\_dispuesto\_a\_devolverlo,}
+\AttributeTok{pref\_soc\_revancha\_injusto\_personal =}\NormalTok{ si\_me\_tratan\_muy\_injustamente\_tomare\_revancha\_en\_la\_primera\_ocasion\_incluso\_aunque\_deba\_pagar\_un\_costo\_por\_ello,}
+\AttributeTok{pref\_soc\_creencia\_buenas\_inteciones =}\NormalTok{ supongo\_que\_la\_gente\_tiene\_solo\_las\_mejores\_intenciones,}
+\AttributeTok{pref\_soc\_extrano\_obsequio =}\NormalTok{ le\_daria\_al\_extrano\_uno\_de\_los\_obsequios\_como\_agradecimiento,}
+\AttributeTok{pref\_soc\_monto\_donacion =}\NormalTok{ imaginese\_la\_siguiente\_situacion\_hoy\_de\_forma\_inesperada\_usted\_recibe\_15\_000\_pesos\_argentinos\_que\_cantidad\_de\_ese\_monto\_donaria\_usted\_a\_una\_buena\_causa)}
+
+\CommentTok{\# M?dulo Origen Social {-}{-}{-}{-}{-}}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{rename}\NormalTok{(}
+\AttributeTok{os\_psh =}\NormalTok{ cuando\_usted\_tenia\_16\_anos\_quien\_era\_el\_principal\_sosten\_de\_su\_hogar\_psh\_la\_persona\_que\_realizaba\_el\_mayor\_aporte\_economico\_al\_hogar,}
+\AttributeTok{os\_psh\_ne =}\NormalTok{ cual\_era\_el\_nivel\_educativo\_de\_esa\_persona,}
+\AttributeTok{os\_psh\_ocupacion =}\NormalTok{ cual\_era\_la\_ocupacion\_principal\_de\_esta\_persona\_cuando\_usted\_tenia\_alrededor\_de\_16\_anos,}
+\AttributeTok{os\_psh\_tarea =}\NormalTok{ que\_tareas\_hacia\_esa\_persona\_en\_ese\_trabajo,}
+\AttributeTok{os\_psh\_jerarquia =}\NormalTok{ formaba\_parte\_del\_empleo\_del\_psh\_supervisar\_el\_trabajo\_de\_otros\_o\_decirles\_que\_hacer,}
+\AttributeTok{os\_psh\_cat\_ocup =}\NormalTok{ en\_ese\_trabajo\_esa\_persona\_era,}
+\AttributeTok{os\_psh\_cant\_trabajadores =}\NormalTok{ incluido\_el\_psh\_cuantas\_personas\_trabajaban\_en\_ese\_establecimiento,}
+\AttributeTok{os\_conyuge =}\NormalTok{ cuando\_usted\_tenia\_16\_anos\_quien\_era\_el\_conyuge\_del\_psh\_de\_su\_hogar,}
+\AttributeTok{os\_conyuge\_ne =}\NormalTok{ cual\_era\_el\_nivel\_educativo\_del\_conyuge\_del\_psh)}
+
+\CommentTok{\# M?dulo Trabajo actual {-}{-}{-}{-}}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{rename}\NormalTok{(}
+\AttributeTok{trab\_trabajo =}\NormalTok{ entendiendo\_por\_trabajo\_a\_una\_actividad\_que\_genera\_bienes\_o\_servicios\_para\_el\_mercado\_y\_que\_se\_recibe\_a\_cambio\_dinero\_o\_especies\_la\_semana\_pasada\_usted\_trabajo\_por\_lo\_menos\_una\_hora,}
+\AttributeTok{trab\_busco =}\NormalTok{ busco\_trabajo\_en\_los\_ultimos\_30\_dias\_o\_esta\_tratando\_de\_ponerse\_alguno\_por\_su\_cuenta,}
+\AttributeTok{trab\_tiempo\_busco =}\NormalTok{ cuanto\_hace\_que\_esta\_en\_la\_situacion\_anterior,}
+\AttributeTok{trab\_ocupacion =}\NormalTok{ como\_se\_llama\_la\_ocupacion\_de\_la\_que\_usted\_trabajo\_la\_semana\_pasada,}
+\AttributeTok{trab\_tarea =}\NormalTok{ que\_tareas\_realiza\_en\_ese\_trabajo,}
+\AttributeTok{trab\_jerarquia =}\NormalTok{ forma\_parte\_de\_su\_empleo\_supervisar\_el\_trabajo\_de\_otros\_o\_decirles\_que\_hacer,}
+\AttributeTok{trab\_cat\_ocup =}\NormalTok{ en\_ese\_trabajo\_usted\_es,}
+\AttributeTok{trab\_cant\_trabajadores =}\NormalTok{ incluido\_usted\_cuantas\_personas\_trabajan\_en\_ese\_establecimiento,}
+\AttributeTok{trab\_jubilacion =}\NormalTok{ en\_ese\_trabajo,}
+\AttributeTok{trab\_vacaciones =}\NormalTok{ en\_ese\_trabajo\_usted\_tiene\_vacaciones\_pagas,}
+\AttributeTok{trab\_obra\_social =}\NormalTok{ en\_ese\_trabajo\_usted\_tiene\_obra\_social\_prepaga,}
+\AttributeTok{trab\_aguinaldo =}\NormalTok{ en\_ese\_trabajo\_usted\_tiene\_aguinaldo,}
+\AttributeTok{trab\_salario\_familiar =}\NormalTok{ en\_ese\_trabajo\_usted\_tiene\_salario\_familiar,}
+\AttributeTok{trab\_dias\_enfermedad =}\NormalTok{ en\_ese\_trabajo\_usted\_tiene\_dias\_pagos\_por\_enfermedad,}
+\AttributeTok{trab\_dias\_estudio =}\NormalTok{ en\_ese\_trabajo\_usted\_tiene\_dias\_por\_estudio,}
+\AttributeTok{trab\_horas =}\NormalTok{ por\_ultimo\_cuantas\_horas\_incluyendo\_las\_horas\_extras\_trabajo\_usted\_la\_semana\_pasada)}
+
+\CommentTok{\# M?dulo Ingresos del Hogar}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{rename}\NormalTok{(}
+\AttributeTok{ing\_trabajo =}\NormalTok{ teniendo\_en\_cuenta\_no\_solo\_sus\_propios\_ingresos\_sino\_tambien\_los\_de\_las\_demas\_personas\_de\_su\_hogar\_indique\_cuales\_de\_los\_siguientes\_tipos\_de\_ingresos\_tuvieron\_en\_su\_hogar\_durante\_el\_mes\_pasado\_lo\_que\_ganan\_por\_trabajo,}
+\AttributeTok{ing\_programas\_empleo =}\NormalTok{ teniendo\_en\_cuenta\_no\_solo\_sus\_propios\_ingresos\_sino\_tambien\_los\_de\_las\_demas\_personas\_de\_su\_hogar\_indique\_cuales\_de\_los\_siguientes\_tipos\_de\_ingresos\_tuvieron\_en\_su\_hogar\_durante\_el\_mes\_pasado\_programas\_de\_empleo,}
+\AttributeTok{ing\_jubilacion =}\NormalTok{ teniendo\_en\_cuenta\_no\_solo\_sus\_propios\_ingresos\_sino\_tambien\_los\_de\_las\_demas\_personas\_de\_su\_hogar\_indique\_cuales\_de\_los\_siguientes\_tipos\_de\_ingresos\_tuvieron\_en\_su\_hogar\_durante\_el\_mes\_pasado\_jubilacion,}
+\AttributeTok{ing\_auh =}\NormalTok{ teniendo\_en\_cuenta\_no\_solo\_sus\_propios\_ingresos\_sino\_tambien\_los\_de\_las\_demas\_personas\_de\_su\_hogar\_indique\_cuales\_de\_los\_siguientes\_tipos\_de\_ingresos\_tuvieron\_en\_su\_hogar\_durante\_el\_mes\_pasado\_asignacion\_universal\_por\_hijo\_auh,}
+\AttributeTok{ing\_pension =}\NormalTok{ teniendo\_en\_cuenta\_no\_solo\_sus\_propios\_ingresos\_sino\_tambien\_los\_de\_las\_demas\_personas\_de\_su\_hogar\_indique\_cuales\_de\_los\_siguientes\_tipos\_de\_ingresos\_tuvieron\_en\_su\_hogar\_durante\_el\_mes\_pasado\_algun\_otro\_tipo\_de\_pension\_especifica\_7\_hijos\_invalidez\_o\_discapacidad\_etc,}
+\AttributeTok{ing\_indenmizacion =}\NormalTok{ teniendo\_en\_cuenta\_no\_solo\_sus\_propios\_ingresos\_sino\_tambien\_los\_de\_las\_demas\_personas\_de\_su\_hogar\_indique\_cuales\_de\_los\_siguientes\_tipos\_de\_ingresos\_tuvieron\_en\_su\_hogar\_durante\_el\_mes\_pasado\_indemnizacion\_por\_despido,}
+\AttributeTok{ing\_seguro\_desempleo =}\NormalTok{ teniendo\_en\_cuenta\_no\_solo\_sus\_propios\_ingresos\_sino\_tambien\_los\_de\_las\_demas\_personas\_de\_su\_hogar\_indique\_cuales\_de\_los\_siguientes\_tipos\_de\_ingresos\_tuvieron\_en\_su\_hogar\_durante\_el\_mes\_pasado\_seguro\_de\_desempleo,}
+\AttributeTok{ing\_alquiler =}\NormalTok{ teniendo\_en\_cuenta\_no\_solo\_sus\_propios\_ingresos\_sino\_tambien\_los\_de\_las\_demas\_personas\_de\_su\_hogar\_indique\_cuales\_de\_los\_siguientes\_tipos\_de\_ingresos\_tuvieron\_en\_su\_hogar\_durante\_el\_mes\_pasado\_alquiler\_de\_una\_propiedad,}
+\AttributeTok{ing\_beca =}\NormalTok{ teniendo\_en\_cuenta\_no\_solo\_sus\_propios\_ingresos\_sino\_tambien\_los\_de\_las\_demas\_personas\_de\_su\_hogar\_indique\_cuales\_de\_los\_siguientes\_tipos\_de\_ingresos\_tuvieron\_en\_su\_hogar\_durante\_el\_mes\_pasado\_beca\_de\_estudios,}
+\AttributeTok{ing\_cuota\_alimentaria =}\NormalTok{ teniendo\_en\_cuenta\_no\_solo\_sus\_propios\_ingresos\_sino\_tambien\_los\_de\_las\_demas\_personas\_de\_su\_hogar\_indique\_cuales\_de\_los\_siguientes\_tipos\_de\_ingresos\_tuvieron\_en\_su\_hogar\_durante\_el\_mes\_pasado\_cuota\_alimentaria,}
+\AttributeTok{ing\_n\_aportantes =}\NormalTok{ contandose\_usted\_el\_mes\_pasado\_cuantas\_personas\_que\_viven\_en\_este\_hogar\_aportaron\_ingresos\_monetarios,}
+\AttributeTok{ing\_totales =}\NormalTok{ sumando\_lo\_aportado\_por\_todos\_los\_miembros\_del\_hogar\_mas\_lo\_que\_recibieron\_de\_otras\_partes\_como\_ayudas\_de\_otras\_personas\_planes\_sociales\_seguro\_de\_desempleo\_u\_otros\_ingresos\_cuanto\_fue\_el\_ingreso\_en\_dinero\_total\_del\_hogar\_el\_mes\_pasado)}
+
+\CommentTok{\# M?dulo Acad?mico UNAJ {-}{-}{-}{-}}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{rename}\NormalTok{(}
+\AttributeTok{unaj\_ano\_ingreso =}\NormalTok{ en\_que\_ano\_ingresaste\_a\_la\_unaj,}
+\AttributeTok{unaj\_estudios\_anteriores =}\NormalTok{ cursaste\_estudios\_terciarios\_universitarios\_antes\_de\_ingresar\_al\_unaj,}
+\AttributeTok{unaj\_n\_materias\_cursando =}\NormalTok{ cuantas\_materias\_estas\_cursando\_este\_cuatrimestre,}
+\AttributeTok{unaj\_periodo\_lectivo =}\NormalTok{ indica\_tu\_actual\_periodo\_lectivo\_primer\_o\_el\_segundo\_cuatrimestre,}
+\AttributeTok{unaj\_ano\_lectivo =}\NormalTok{ indica\_tu\_actual\_ano\_lectivo,}
+\AttributeTok{unaj\_horas\_estudio =}\NormalTok{ pensando\_en\_este\_cuatrimestre\_cuantas\_horas\_semanales\_incluyendo\_las\_horas\_de\_la\_propia\_cursada\_le\_estas\_dedicando\_en\_promedio\_al\_estudio,}
+\AttributeTok{unaj\_n\_materias\_aprobadas =}\NormalTok{ cuantas\_materias\_aprobadas\_de\_la\_carrera\_tenes,}
+\AttributeTok{unaj\_progresar =}\NormalTok{ actualmente\_sos\_beneficiario\_del\_progresar) }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{relocate}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"unaj\_ano\_lectivo"}\NormalTok{,}
+           \StringTok{"unaj\_periodo\_lectivo"}\NormalTok{,}
+           \StringTok{"unaj\_horas\_estudio"}\NormalTok{), }\AttributeTok{.after =}\NormalTok{ unaj\_n\_materias\_cursando)}
+
+\CommentTok{\# M?dulo materia Metodolog?a Cuantitativa}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{rename}\NormalTok{(}
+\AttributeTok{cuanti\_docente =}\NormalTok{ indica\_el\_docente\_de\_tu\_comision,}
+\AttributeTok{cuanti\_1\_palabra =}\NormalTok{ primer\_palabra,}
+\AttributeTok{cuanti\_2\_palabra =}\NormalTok{ segunda\_palabra,}
+\AttributeTok{cuanti\_3\_palabra =}\NormalTok{ tercera\_palabra)}
+
+\CommentTok{\# M?dulo Redes Sociales}
+
+\NormalTok{df\_encuesta }\OtherTok{\textless{}{-}}\NormalTok{ df\_encuesta }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{rename}\NormalTok{(}
+\AttributeTok{redes\_tu\_nombre =}\NormalTok{ por\_favor\_selecciona\_tu\_nombre\_dentro\_de\_esta\_lista,}
+\AttributeTok{redes\_1\_contacto =}\NormalTok{ selecciona\_al\_primer\_estudiante,}
+\AttributeTok{redes\_2\_contacto =}\NormalTok{ selecciona\_al\_segundo\_estudiante,}
+\AttributeTok{redes\_3\_contacto =}\NormalTok{ selecciona\_al\_tercer\_estudiante,}
+\AttributeTok{redes\_4\_contacto =}\NormalTok{ selecciona\_al\_cuarto\_estudiante,}
+\AttributeTok{redes\_5\_contacto =}\NormalTok{ selecciona\_al\_quinto\_estudiante) }\SpecialCharTok{|}\ErrorTok{\textgreater{}}
+\FunctionTok{relocate}\NormalTok{(redes\_tu\_nombre, }\AttributeTok{.before =}\NormalTok{ redes\_1\_contacto)}
+
+\CommentTok{\# Grabo el archivo}
+
+\FunctionTok{write\_rds}\NormalTok{(df\_encuesta,}
+          \FunctionTok{here}\NormalTok{(}\StringTok{"Outputs"}\NormalTok{,}\StringTok{"df\_encuesta.rds"}\NormalTok{))}
+                  
+                  
 \end{Highlighting}
 \end{Shaded}
-
-\begin{table}
-
-\caption{\label{tab:nice-tab}Here is a nice table!}
-\centering
-\begin{tabular}[t]{rr}
-\toprule
-temperature & pressure\\
-\midrule
-0 & 0.0002\\
-20 & 0.0012\\
-40 & 0.0060\\
-60 & 0.0300\\
-80 & 0.0900\\
-\addlinespace
-100 & 0.2700\\
-120 & 0.7500\\
-140 & 1.8500\\
-160 & 4.2000\\
-180 & 8.8000\\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \hypertarget{parts}{%
 \chapter{Parts}\label{parts}}

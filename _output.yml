@@ -11,7 +11,9 @@ bookdown::bs4_book:
       google: "Open Sans"
     code_font:
       google: "Roboto Mono"
+    code_folding: hide  
   template: "bs4_book_es.html"
+  css: style.css
   repo: https://github.com/diegoteca/cuanti_analisis_de_datos/tree/main/_book # Tiene que ser repositorio abierto
   
   # Se puede especificar un template particualar

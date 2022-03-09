@@ -1,7 +1,7 @@
 ---
 title: "Diego Armando Datos"
 author: "Metodistas del Sur"
-date: "2022-03-08"
+date: "2022-03-09"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -25,4 +25,12 @@ Aparte de la distinción entre técnicas básicas y complejas la diferencia en c
 
 Para lograr lo anterior durante la cursada de la materia se realiza una encuesta mediante un [formulario de google](https://www.google.com/intl/es-419_ar/forms/about/ "Ir a formularios de Google") que contestan los mismos estudiantes. Luego el contenido de sus respuestas se analiza con el [programa R](https://www.r-project.org/ "Ir al programa R") y con el mismo programa se escribe y publica este informe.
 
-En cuanto al estilo del texto, si bien van a encontrar citas y referencias, el mismo es deliberadamente informal.
+En cuanto al estilo del texto será deliberamente informal aunque con 3 excepciones con fines principalmente pedagógicos:
+
+-   Se incluirán piezas de código
+
+-   Se hará uso de citas y referencias (estilo APA)
+
+-   Los conceptos importantes apareceran traducidos al ingles entre paréntesis.
+
+Por otro lado, el texto estará acompañado de los siguientes elementos visuales:
