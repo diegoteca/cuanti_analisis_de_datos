@@ -1,4 +1,54 @@
-# Footnotes and citations 
+# Análisis de texto
+
+```{r librerias}
+# Levanto el dataset de la encuesta
+
+library(dplyr)
+library(readr)
+library(tidyr)
+library(stringr)
+library(tidytext)
+
+           
+```
+```{r insumo}
+# Levanto el dataset de la encuesta
+
+df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds"))
+```
+
+El insumo de estos análisis es una serie de preguntas de respuesta abierta. Sin embargo, dado el formato específico de la pregunta se trata de un dato bastante estructurado. En este sentido se deberán hacer una serie de procesamientos previos para estructurar aún más el dato pero no tanto como si fuera, por ejemplo, textos provenientes de entrevistas en profundidad, de canciones o de discursos presidenciales.
+
+En este caso se trata de 3 palabras por cada encuestado. Expresado en el léxico de una matriz de datos se trata de 3 columnas por cada fila. Para facilitar el siguiente análisis lo que primero debemos realizar es un "alargamiento" de la matriz de datos para tener una sola columna y más filas que, en principio, se repetirían 3 veces.
+
+```{r alargamiento}
+
+df_longer <- df_encuesta |>
+             select(dni, 
+                    unaj_ano_ingreso,
+                    unaj_n_materias_aprobadas,
+                    sexo, 
+                    cuanti_1_palabra, 
+                    cuanti_2_palabra, 
+                    cuanti_3_palabra) |>
+             pivot_longer(c(cuanti_1_palabra,
+                          cuanti_2_palabra,
+                          cuanti_3_palabra),
+                          names_to = "orden_palabra",
+                          values_to = "cuanti_palabras")
+                      
+```
+```{r cleaning_palabras_cuanti}
+
+df_longer <- df_longer |>
+mutate(cuanti_palabras_ok = str_replace(cuanti_palabras, "[.]+$", "")) |> # Saco los puntos
+                 anti_join(stop_words)
+```
+
+De este modo es como si se hubiera armado una clave para cada palabra.
+
+
+https://quanteda.io/reference/stopwords.html
 
 ## Footnotes
 

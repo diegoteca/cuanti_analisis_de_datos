@@ -4,6 +4,7 @@
 # Levanto el dataset de la encuesta
 
 library(dplyr)
+library(readr)
 library(stringr)
 library(tidygeocoder)
 library(sf)
