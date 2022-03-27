@@ -46,7 +46,7 @@ df_encuesta <- df_encuesta |>
                relocate(dni) |>
                mutate(dni = as.integer(dni))
 
-# M?dulo Demogr?fico Individual ----
+# M?dulo Demográfico Individual ----
 
 df_encuesta <- df_encuesta |>
                rename(sexo = indique_el_sexo_asignado_al_nacer,

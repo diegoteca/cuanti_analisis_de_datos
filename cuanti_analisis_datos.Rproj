@@ -13,3 +13,7 @@ RnwWeave: Sweave
 LaTeX: pdfLaTeX
 
 BuildType: Website
+
+PythonType: system
+PythonVersion: 3.10.2
+PythonPath: C:/Users/dquar/AppData/Local/Programs/Python/Python310/python.exe

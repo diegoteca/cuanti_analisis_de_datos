@@ -1,0 +1,67 @@
+# Análisis Espaciales
+
+```{r librerias}
+# Levanto el dataset de la encuesta
+
+library(dplyr)
+library(stringr)
+library(tidygeocoder)
+library(sf)
+library(mapview)
+           
+```
+```{r}
+# Levanto el dataset de la encuesta
+
+df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds"))
+
+df_mapa <- df_encuesta |>
+select(viv_calle,
+       viv_altura,
+       viv_partido) |>
+mutate(viv_provincia = "Buenos Aires",
+       viv_pais = "Argentina",
+       viv_calle_ok = if_else(str_starts(viv_calle, "[0-9]"),
+                                        str_glue("Calle {viv_calle}"),
+                                        viv_calle),
+       viv_calle_ok = str_replace(viv_calle_ok, "entre.*$", ""), # Saco los "entre"
+       viv_calle_ok = str_replace(viv_calle_ok, "[.][0-9]+$", ""), # Saco los decimales
+       street = as.character(str_glue("{viv_altura} {viv_calle_ok}")))
+
+geo <- geo(street = df_mapa$street,
+        county = df_mapa$viv_partido,
+        state = df_mapa$viv_provincia,
+        country = df_mapa$viv_pais,
+        method = 'osm',
+        lat = latitude , 
+        long = longitude,
+        full_results = FALSE,
+        progress_bar = TRUE)
+
+lat_long <- df_mapa |>
+            bind_cols(geo) |>
+          write_rds(here("Outputs","lat_long.rds"))
+
+lat_long_sf <- lat_long |>
+                  filter(!is.na(latitude)) |>
+                  st_as_sf(
+         coords = c("longitude", "latitude"),
+         crs = 4326,
+         dim = "XY") |>
+         write_rds(here("Outputs","lat_long_sf.rds"))
+
+mapview(lat_long_sf)
+          
+```
+
+
+You can add parts to organize one or more book chapters together. Parts can be inserted at the top of an .Rmd file, before the first-level chapter heading in that same file. 
+
+Add a numbered part: `# (PART) Act one {-}` (followed by `# A chapter`)
+
+Add an unnumbered part: `# (PART\*) Act one {-}` (followed by `# A chapter`)
+
+Add an appendix as a special kind of un-numbered part: `# (APPENDIX) Other stuff {-}` (followed by `# A chapter`). Chapters in an appendix are prepended with letters instead of numbers.
+
+
+
