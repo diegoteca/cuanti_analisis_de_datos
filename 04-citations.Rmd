@@ -8,6 +8,12 @@ library(readr)
 library(tidyr)
 library(stringr)
 library(tidytext)
+library(ggplot2)
+library(hunspell) # Funciona mejor para el español. Uso la versión de desarrollo porque
+# funciona mejor los diccionario en rstudio
+#devtools::install_github("ropensci/hunspell", force = TRUE)
+library(quanteda)
+library(SnowballC)
 
            
 ```
@@ -40,15 +46,118 @@ df_longer <- df_encuesta |>
 ```
 ```{r cleaning_palabras_cuanti}
 
+# Comienzo el proceso de transformación desde cuanti_palabras a cuanti_palabras_ok
+# Se sacan los puntos
+# Se pasa todo a minúscula. Es importante porque el stemming y las stopword funcionan mejor
+# Se sacan las stopwords
+# Se hace el stemming
+# Se sacan los acentos. Esto va a lo último porque modifica el stemming.
+
+# Se sacan las "s"
+# Se sacan las stopword (quanteda tiene uno bueno pero primera hay que token)
+# Tidytext tiene un wraping para lafuncion stopwprd del paquete stopwords
+# El proceso de stemming lo hago con hunspell en vez de snowball. 
+# 
+# Cambio a mano el diccionario de hunspell y luego lo especifico en el código
+
+# Creo in objeto con los stopword. Uso tidytext para hacer un antijoint pero la base de datos
+# sale del paquete stopwords que, a su turno, levante base de distintos lugares.
+# El stopword lo uso luego de poner las palabras en minúsculas
+
+cuanti_stopwords <- get_stopwords(language = "es", source = "nltk") |> # Por ahora nltk tiene más palabras
+                    rename(cuanti_stopwords = word)
+
 df_longer <- df_longer |>
-mutate(cuanti_palabras_ok = str_replace(cuanti_palabras, "[.]+$", "")) |> # Saco los puntos
-                 anti_join(stop_words)
+mutate(
+cuanti_palabras_ok = str_replace(cuanti_palabras, "[.]+$", ""), # Saco los puntos
+cuanti_palabras_ok = str_to_lower(cuanti_palabras_ok)) # Todo a minuscula
+
+df_longer <- df_longer |> 
+anti_join(cuanti_stopwords, by = c("cuanti_palabras_ok" = "cuanti_stopwords")) # Stopwords
+
+# Antes del stemming pruebo con el corrector de palabras
+# 
+# Si previamente el (nuevo) diccionario ya está creado se buscar como un nuevo lenguaje de diccionario
+# Me sirve para stemming
+
+cuanti_diccionario <- hunspell::dictionary(lang = "es_ES_delta")
+
+df_longer <- df_longer |>
+mutate(
+cuanti_palabras_analyze = hunspell_analyze(cuanti_palabras_ok, cuanti_diccionario),
+cuanti_palabras_check = hunspell_check(cuanti_palabras_ok, cuanti_diccionario),
+cuanti_palabras_suggest = hunspell_suggest(cuanti_palabras_ok, cuanti_diccionario))
+
+# La idea es la siguiente:
+# Si el check dió false, va la (única) palabra que salió en suggest.
+# Si el check dió true, va la primera palabra de la lista
+
+#df_longer$cuanti_palabras_suggest #df_longer$cuanti_palabras_suggest[sapply(length(df_longer$cuanti_palabras_suggest == 0))] #if_else(df_longer$cuanti_palabras_suggest[sapply(length(df_longer$cuanti_palabras_suggest == 0))],
+         #                                   NA,
+#                                            cuanti_palabras_suggest)
+
+df_longer <- df_longer |>
+mutate(cuanti_palabras_pre_stem = map(cuanti_palabras_suggest,1))
+
+df_longer$cuanti_palabras_pre_stem[sapply(df_longer$cuanti_palabras_pre_stem, is.null)] <- NA
+
+df_longer <- df_longer |>
+mutate(cuanti_palabras_pre_stem = unlist(cuanti_palabras_pre_stem))
+
+# Stemming
+# Así como para las stopwords hice un archivo específico ahora hago un
+# diccionario que agrega más palabras al original
+# Hay que tener cuidado porque "quanteda" pisa a dictionary de "hunspell"
+
+df_longer <- df_longer |>
+mutate(cuanti_palabras_stem = hunspell_stem(cuanti_palabras_pre_stem, dict = cuanti_diccionario))
+
+df_longer <- df_longer |>
+mutate(cuanti_palabras_stem = map(cuanti_palabras_stem,1))
+
+df_longer$cuanti_palabras_stem[sapply(df_longer$cuanti_palabras_stem, is.null)] <- NA
+
+df_longer <- df_longer |>
+mutate(cuanti_palabras_stem = unlist(cuanti_palabras_stem))
+
+# Arreglo a mano algunos pequeños casos
+
+df_longer <-  df_longer |>
+mutate(
+cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "métodos", "método"),
+cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "cantidades", "cantidad"),
+cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "estadísticas", "estadística"),
+cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "encuestas", "encuesta"))      
+
+          
+#cuanti_palabras_ok = stringi::stri_trans_general(cuanti_palabras_ok, "Latin-ASCII")), # Saco los acentos
+
+#df_longer <- df_longer |>
+#mutate(
+#cuanti_palabras_hunspell = hunspell_stem(cuanti_palabras_ok, dict = cuanti_diccionario))
+
+
+#cuanti_palabras_snowballc = wordStem(cuanti_palabras, language = "spanish"))
+
+#cuanti_palabras_hunspell_check = hunspell_check(cuanti_palabras, dict = dictionary("es_ES")),
 ```
 
 De este modo es como si se hubiera armado una clave para cada palabra.
 
 
 https://quanteda.io/reference/stopwords.html
+
+# Primeras aproximaciones
+
+```{r tabla_conteo}
+
+df_longer |>
+filter(!is.na(cuanti_palabras_pre_stem)) |>
+  count(cuanti_palabras_pre_stem) |>
+  arrange(desc(n))
+        
+```
+
 
 ## Footnotes
 
