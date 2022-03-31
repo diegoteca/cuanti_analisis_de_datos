@@ -12,7 +12,7 @@ library(mapview)
 library(here)
            
 ```
-```{r}
+```{r geo}
 # Levanto el dataset de la encuesta
 
 df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds"))
@@ -52,7 +52,7 @@ lat_long_sf <- lat_long |>
          dim = "XY") |>
          write_rds(here("Outputs","lat_long_sf.rds"))
 
-mapview(lat_long_sf)
+mapview(lat_long_sf) # Ojo con mapview en bookdown
           
 ```
 

@@ -1,6 +1,5 @@
 book_filename: "cuanti_analisis_datos"
-new_session: true
-new_sessopn: yes # Para usar la estrategia K-M Knit and then Merge
+new_session: no # Para usar la estrategia M-K (merge and the Knit). La otra (K-M) no es compatible con mapview 
 before_chapter_script: _common.R
 delete_merged_file: true
 language:

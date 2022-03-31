@@ -1,0 +1,11 @@
+diseño-de-la-encuesta
+diseño-del-cuestionario
+diseño-de-la-selección-de-casos
+cross
+limpieza
+análisis-espaciales
+análisis-de-texto
+primeras-aproximaciones
+nube-de-palabras
+footnotes
+citations

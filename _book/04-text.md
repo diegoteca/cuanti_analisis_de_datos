@@ -1,10 +1,3 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
----
-
 # Análisis de texto
 
 
@@ -161,7 +154,7 @@ cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "técnicas", "t
 De este modo es como si se hubiera armado una clave para cada palabra.
 
 
-# Primeras aproximaciones
+## Primeras aproximaciones
 
 
 ```r
@@ -175,7 +168,7 @@ group_by(hog_convivencia_hijes) |>
         
 ```
 
-# Nube de palabras
+## Nube de palabras
 
 
 ```r

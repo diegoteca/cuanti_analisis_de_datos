@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Capítulo 4 Análisis de texto | Diego Armando Datos</title>
+<meta name="author" content="Metodistas del Sur">
+<meta name="description" content="# Levanto el dataset de la encuesta library(stringr) library(tidytext) library(hunspell) # Funciona mejor para el español. Uso la versión de desarrollo porque # funciona mejor los diccionario en...">
+<meta name="generator" content="bookdown 0.25.3 with bs4_book()">
+<meta property="og:title" content="Capítulo 4 Análisis de texto | Diego Armando Datos">
+<meta property="og:type" content="book">
+<meta property="og:description" content="# Levanto el dataset de la encuesta library(stringr) library(tidytext) library(hunspell) # Funciona mejor para el español. Uso la versión de desarrollo porque # funciona mejor los diccionario en...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Capítulo 4 Análisis de texto | Diego Armando Datos">
+<meta name="twitter:description" content="# Levanto el dataset de la encuesta library(stringr) library(tidytext) library(hunspell) # Funciona mejor para el español. Uso la versión de desarrollo porque # funciona mejor los diccionario en...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/_Lato-0.4.1/font.css" rel="stylesheet">
+<link href="libs/_Roboto%20Mono-0.4.1/font.css" rel="stylesheet">
+<link href="libs/_Open%20Sans-0.4.1/font.css" rel="stylesheet">
+<script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="libs/leaflet-1.3.1/leaflet.js"></script><link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="libs/proj4-2.6.2/proj4.min.js"></script><script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script><link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script><script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script><script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script><link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet">
+<script src="libs/HomeButton-0.0.1/home-button.js"></script><script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script><script src="libs/clipboard-0.0.1/setClipboardText.js"></script><link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet">
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Diego Armando Datos</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Buscar" aria-label="Buscar">
+</form>
+
+      <nav aria-label="Contenido"><h2>Contenido</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Presentación y objetivos del informe</a></li>
+<li><a class="" href="dise%C3%B1o-de-la-encuesta.html"><span class="header-section-number">1</span> Diseño de la encuesta</a></li>
+<li><a class="" href="cross.html"><span class="header-section-number">2</span> Limpieza y consistencia de los datos</a></li>
+<li><a class="" href="an%C3%A1lisis-espaciales.html"><span class="header-section-number">3</span> Análisis Espaciales</a></li>
+<li><a class="active" href="an%C3%A1lisis-de-texto.html"><span class="header-section-number">4</span> Análisis de texto</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/diegoteca/cuanti_analisis_de_datos/tree/main/_book">Ver repositorio <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="análisis-de-texto" class="section level1" number="4">
+<h1>
+<span class="header-section-number">Capítulo 4</span> Análisis de texto<a class="anchor" aria-label="anchor" href="#an%C3%A1lisis-de-texto"><i class="fas fa-link"></i></a>
+</h1>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Levanto el dataset de la encuesta</span>
+
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/juliasilge/tidytext">tidytext</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/hunspell/">hunspell</a></span><span class="op">)</span> <span class="co"># Funciona mejor para el español. Uso la versión de desarrollo porque</span>
+<span class="co"># funciona mejor los diccionario en rstudio</span>
+<span class="co">#devtools::install_github("ropensci/hunspell", force = TRUE)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+           </code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Levanto el dataset de la encuesta</span>
+
+<span class="va">df_encuesta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html">read_rds</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"Outputs"</span>, <span class="st">"df_encuesta.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>El insumo de estos análisis es una serie de preguntas de respuesta abierta. Sin embargo, dado el formato específico de la pregunta se trata de un dato que, si bien no puede considerarse estructurado, se aleja un poco de otros ejemplos de datos no estructurados como los textos provenientes de entrevistas en profundidad, de canciones o de discursos presidenciales.</p>
+<p>En este caso se trata de 3 palabras por cada encuestado. Expresado en el léxico de una matriz de datos se trata de 3 columnas por cada fila. Para facilitar el siguiente análisis lo que primero debemos realizar es un “alargamiento” de la matriz de datos para tener una sola columna y más filas que, en principio, se repetirían 3 veces.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_encuesta</span> |&gt;
+             <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">dni</span>, 
+                    <span class="va">unaj_ano_ingreso</span>,
+                    <span class="va">unaj_n_materias_aprobadas</span>,
+                    <span class="va">sexo</span>,
+                    <span class="va">hog_convivencia_hijes</span>,
+                    <span class="va">cuanti_1_palabra</span>, 
+                    <span class="va">cuanti_2_palabra</span>, 
+                    <span class="va">cuanti_3_palabra</span><span class="op">)</span> |&gt;
+             <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">cuanti_1_palabra</span>,
+                          <span class="va">cuanti_2_palabra</span>,
+                          <span class="va">cuanti_3_palabra</span><span class="op">)</span>,
+                          names_to <span class="op">=</span> <span class="st">"orden_palabra"</span>,
+                          values_to <span class="op">=</span> <span class="st">"cuanti_palabras"</span><span class="op">)</span>
+                      </code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># Comienzo el proceso de transformación desde cuanti_palabras a cuanti_palabras_ok</span>
+<span class="co"># Se sacan los puntos</span>
+<span class="co"># Se pasa todo a minúscula. Es importante porque el stemming y las stopword funcionan mejor</span>
+<span class="co"># Se sacan las stopwords</span>
+<span class="co"># Se hace el stemming</span>
+<span class="co"># Se sacan los acentos. Esto va a lo último porque modifica el stemming.</span>
+
+<span class="co"># Se sacan las "s"</span>
+<span class="co"># Se sacan las stopword (quanteda tiene uno bueno pero primera hay que token)</span>
+<span class="co"># Tidytext tiene un wraping para lafuncion stopwprd del paquete stopwords</span>
+<span class="co"># El proceso de stemming lo hago con hunspell en vez de snowball. </span>
+<span class="co"># </span>
+<span class="co"># Cambio a mano el diccionario de hunspell y luego lo especifico en el código</span>
+
+<span class="co"># Creo in objeto con los stopword. Uso tidytext para hacer un antijoint pero la base de datos</span>
+<span class="co"># sale del paquete stopwords que, a su turno, levante base de distintos lugares.</span>
+<span class="co"># El stopword lo uso luego de poner las palabras en minúsculas</span>
+
+<span class="va">cuanti_stopwords</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/get_stopwords.html">get_stopwords</a></span><span class="op">(</span>language <span class="op">=</span> <span class="st">"es"</span>, source <span class="op">=</span> <span class="st">"nltk"</span><span class="op">)</span> |&gt; <span class="co"># Por ahora nltk tiene más palabras</span>
+                    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>cuanti_stopwords <span class="op">=</span> <span class="va">word</span><span class="op">)</span>
+
+<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+cuanti_palabras_ok <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras</span>, <span class="st">"[.]+$"</span>, <span class="st">""</span><span class="op">)</span>, <span class="co"># Saco los puntos</span>
+cuanti_palabras_ok <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_lower</a></span><span class="op">(</span><span class="va">cuanti_palabras_ok</span><span class="op">)</span><span class="op">)</span> <span class="co"># Todo a minuscula</span>
+
+<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt; 
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join</a></span><span class="op">(</span><span class="va">cuanti_stopwords</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cuanti_palabras_ok"</span> <span class="op">=</span> <span class="st">"cuanti_stopwords"</span><span class="op">)</span><span class="op">)</span> <span class="co"># Stopwords</span>
+
+<span class="co"># Antes del stemming pruebo con el corrector de palabras</span>
+<span class="co"># </span>
+<span class="co"># Si previamente el (nuevo) diccionario ya está creado se buscar como un nuevo lenguaje de diccionario</span>
+<span class="co"># Me sirve para stemming</span>
+
+<span class="va">cuanti_diccionario</span> <span class="op">&lt;-</span> <span class="fu">hunspell</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/hunspell/reference/hunspell.html">dictionary</a></span><span class="op">(</span>lang <span class="op">=</span> <span class="st">"es_ES_delta"</span><span class="op">)</span>
+
+<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+cuanti_palabras_analyze <span class="op">=</span> <span class="fu"><a href="https://docs.ropensci.org/hunspell/reference/hunspell.html">hunspell_analyze</a></span><span class="op">(</span><span class="va">cuanti_palabras_ok</span>, <span class="va">cuanti_diccionario</span><span class="op">)</span>,
+cuanti_palabras_check <span class="op">=</span> <span class="fu"><a href="https://docs.ropensci.org/hunspell/reference/hunspell.html">hunspell_check</a></span><span class="op">(</span><span class="va">cuanti_palabras_ok</span>, <span class="va">cuanti_diccionario</span><span class="op">)</span>,
+cuanti_palabras_suggest <span class="op">=</span> <span class="fu"><a href="https://docs.ropensci.org/hunspell/reference/hunspell.html">hunspell_suggest</a></span><span class="op">(</span><span class="va">cuanti_palabras_ok</span>, <span class="va">cuanti_diccionario</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># La idea es la siguiente:</span>
+<span class="co"># Si el check dió false, va la (única) palabra que salió en suggest.</span>
+<span class="co"># Si el check dió true, va la primera palabra de la lista</span>
+
+<span class="co">#df_longer$cuanti_palabras_suggest #df_longer$cuanti_palabras_suggest[sapply(length(df_longer$cuanti_palabras_suggest == 0))] #if_else(df_longer$cuanti_palabras_suggest[sapply(length(df_longer$cuanti_palabras_suggest == 0))],</span>
+         <span class="co">#                                   NA,</span>
+<span class="co">#                                            cuanti_palabras_suggest)</span>
+
+<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">cuanti_palabras_suggest</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">df_longer</span><span class="op">$</span><span class="va">cuanti_palabras_pre_stem</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">df_longer</span><span class="op">$</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="va">is.null</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+
+<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># Stemming</span>
+<span class="co"># Así como para las stopwords hice un archivo específico ahora hago un</span>
+<span class="co"># diccionario que agrega más palabras al original</span>
+<span class="co"># Hay que tener cuidado porque "quanteda" pisa a dictionary de "hunspell"</span>
+
+<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cuanti_palabras_stem <span class="op">=</span> <span class="fu"><a href="https://docs.ropensci.org/hunspell/reference/hunspell.html">hunspell_stem</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, dict <span class="op">=</span> <span class="va">cuanti_diccionario</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cuanti_palabras_stem <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">cuanti_palabras_stem</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">df_longer</span><span class="op">$</span><span class="va">cuanti_palabras_stem</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">df_longer</span><span class="op">$</span><span class="va">cuanti_palabras_stem</span>, <span class="va">is.null</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+
+<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cuanti_palabras_stem <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">cuanti_palabras_stem</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># Arreglo a mano algunos pequeños casos</span>
+
+<span class="va">df_longer</span> <span class="op">&lt;-</span>  <span class="va">df_longer</span> |&gt;
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="st">"métodos"</span>, <span class="st">"método"</span><span class="op">)</span>,
+cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="st">"cantidades"</span>, <span class="st">"cantidad"</span><span class="op">)</span>,
+cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="st">"estadísticas"</span>, <span class="st">"estadística"</span><span class="op">)</span>,
+cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="st">"encuestas"</span>, <span class="st">"encuesta"</span><span class="op">)</span>,
+cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="st">"técnicas"</span>, <span class="st">"técnica"</span><span class="op">)</span><span class="op">)</span>      
+
+          
+<span class="co">#cuanti_palabras_ok = stringi::stri_trans_general(cuanti_palabras_ok, "Latin-ASCII")), # Saco los acentos</span>
+
+<span class="co">#df_longer &lt;- df_longer |&gt;</span>
+<span class="co">#mutate(</span>
+<span class="co">#cuanti_palabras_hunspell = hunspell_stem(cuanti_palabras_ok, dict = cuanti_diccionario))</span>
+
+
+<span class="co">#cuanti_palabras_snowballc = wordStem(cuanti_palabras, language = "spanish"))</span>
+
+<span class="co">#cuanti_palabras_hunspell_check = hunspell_check(cuanti_palabras, dict = dictionary("es_ES")),</span></code></pre></div>
+<p>De este modo es como si se hubiera armado una clave para cada palabra.</p>
+<div id="primeras-aproximaciones" class="section level2" number="4.1">
+<h2>
+<span class="header-section-number">4.1</span> Primeras aproximaciones<a class="anchor" aria-label="anchor" href="#primeras-aproximaciones"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<span class="va">conteo_palabras</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span><span class="op">)</span><span class="op">)</span> |&gt;
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">hog_convivencia_hijes</span><span class="op">)</span> |&gt;
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span><span class="op">)</span> |&gt;
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> |&gt;
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;</span> <span class="fl">2</span><span class="op">)</span>
+        </code></pre></div>
+</div>
+<div id="nube-de-palabras" class="section level2" number="4.2">
+<h2>
+<span class="header-section-number">4.2</span> Nube de palabras<a class="anchor" aria-label="anchor" href="#nube-de-palabras"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lepennec/ggwordcloud">ggwordcloud</a></span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">conteo_palabras</span>, 
+       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">cuanti_palabras_pre_stem</span>, size <span class="op">=</span> <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://lepennec.github.io/ggwordcloud/reference/geom_text_wordcloud.html">geom_text_wordcloud</a></span><span class="op">(</span>area_corr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html">scale_size_area</a></span><span class="op">(</span>max_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">hog_convivencia_hijes</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="cuanti_analisis_datos_files/figure-html/nube_general-1.png" width="672"></div>
+<p>La nube de palabras (<em>wordcloud</em>)</p>
+</div>
+<div id="footnotes" class="section level2" number="4.3">
+<h2>
+<span class="header-section-number">4.3</span> Footnotes<a class="anchor" aria-label="anchor" href="#footnotes"><i class="fas fa-link"></i></a>
+</h2>
+<p>Footnotes are put inside the square brackets after a caret <code>^[]</code>. Like this one <a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This is a footnote.&lt;/p&gt;"><sup>2</sup></a>.</p>
+</div>
+<div id="citations" class="section level2" number="4.4">
+<h2>
+<span class="header-section-number">4.4</span> Citations<a class="anchor" aria-label="anchor" href="#citations"><i class="fas fa-link"></i></a>
+</h2>
+<p>Reference items in your bibliography file(s) using <code>@key</code>.</p>
+<p>For example, we are using the <strong>bookdown</strong> package<span class="citation"><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;Yihui Xie, &lt;em&gt;Bookdown: Authoring Books and Technical Documents with r Markdown&lt;/em&gt;, 2021, &lt;a href="https://CRAN.R-project.org/package=bookdown" role="doc-biblioref"&gt;https://CRAN.R-project.org/package=bookdown&lt;/a&gt;.&lt;/p&gt;'><sup>3</sup></a></span> (check out the last code chunk in index.Rmd to see how this citation key was added) in this sample book, which was built on top of R Markdown and <strong>knitr</strong><span class="citation"><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;Yihui Xie, &lt;em&gt;Dynamic Documents with &lt;span&gt;R&lt;/span&gt; and Knitr&lt;/em&gt;, 2nd ed. (Boca Raton, Florida: Chapman; Hall/CRC, 2015), &lt;a href="http://yihui.org/knitr/" role="doc-biblioref"&gt;http://yihui.org/knitr/&lt;/a&gt;.&lt;/p&gt;'><sup>4</sup></a></span> (this citation was added manually in an external file book.bib). Note that the <code>.bib</code> files need to be listed in the index.Rmd with the YAML <code>bibliography</code> key.</p>
+<p>The <code>bs4_book</code> theme makes footnotes appear inline when you click on them. In this example book, we added <code>csl: chicago-fullnote-bibliography.csl</code> to the <code>index.Rmd</code> YAML, and include the <code>.csl</code> file. To download a new style, we recommend:</p>
+<p>The RStudio Visual Markdown Editor can also make it easier to insert citations:</p>
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-R-bookdown" class="csl-entry">
+Xie, Yihui. <em>Bookdown: Authoring Books and Technical Documents with r Markdown</em>, 2021. <a href="https://CRAN.R-project.org/package=bookdown">https://CRAN.R-project.org/package=bookdown</a>.
+</div>
+<div id="ref-xie2015" class="csl-entry">
+———. <em>Dynamic Documents with <span>R</span> and Knitr</em>. 2nd ed. Boca Raton, Florida: Chapman; Hall/CRC, 2015. <a href="http://yihui.org/knitr/">http://yihui.org/knitr/</a>.
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+  <div class="chapter-nav">
+<div class="prev"><a href="an%C3%A1lisis-espaciales.html"><span class="header-section-number">3</span> Análisis Espaciales</a></div>
+<div class="empty"></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="Índice capítulo"><h2>Índice capítulo</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#an%C3%A1lisis-de-texto"><span class="header-section-number">4</span> Análisis de texto</a></li>
+<li><a class="nav-link" href="#primeras-aproximaciones"><span class="header-section-number">4.1</span> Primeras aproximaciones</a></li>
+<li><a class="nav-link" href="#nube-de-palabras"><span class="header-section-number">4.2</span> Nube de palabras</a></li>
+<li><a class="nav-link" href="#footnotes"><span class="header-section-number">4.3</span> Footnotes</a></li>
+<li><a class="nav-link" href="#citations"><span class="header-section-number">4.4</span> Citations</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/diegoteca/cuanti_analisis_de_datos/tree/main/_book/blob/master/04-text.Rmd">Ver fuente <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/diegoteca/cuanti_analisis_de_datos/tree/main/_book/edit/master/04-text.Rmd">Editar esta página <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Diego Armando Datos</strong>" fue escrito por Metodistas del Sur. Fue actualizado la última vez el 2022-03-31.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>El libro fue hecho íntegramente con el programa R, principalmente con el paquete <a class="text-light" href="https://bookdown.org">bookdown</a></p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>

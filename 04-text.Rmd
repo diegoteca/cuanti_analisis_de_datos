@@ -1,13 +1,6 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
----
-
 # Análisis de texto
 
-```{r librerias}
+```{r librerias_texto}
 # Levanto el dataset de la encuesta
 
 library(stringr)
@@ -151,7 +144,7 @@ cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "técnicas", "t
 De este modo es como si se hubiera armado una clave para cada palabra.
 
 
-# Primeras aproximaciones
+## Primeras aproximaciones
 
 ```{r tabla_conteo}
 library(dplyr)
@@ -164,7 +157,7 @@ group_by(hog_convivencia_hijes) |>
         
 ```
 
-# Nube de palabras
+## Nube de palabras
 
 ```{r nube_general}
 library(ggwordcloud)
