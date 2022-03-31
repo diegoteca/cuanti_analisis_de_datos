@@ -39,6 +39,7 @@ div.rmdimportant {
   background-image: url("../Inputs/Images/importante.png");
 }
 
+/*----- Este funciona. Lo copie en la misma carpeta--------*/
 div.rmdtip {
   background-image: url('tip.png');
 }

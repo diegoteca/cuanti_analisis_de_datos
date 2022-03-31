@@ -218,6 +218,15 @@ relocate(c("unaj_ano_lectivo",
            "unaj_periodo_lectivo",
            "unaj_horas_estudio"), .after = unaj_n_materias_cursando)
 
+# Recategorizaciones académicas
+
+df_longer <- df_longer |>
+        mutate(unaj_n_materias_aprobadas_10 = case_when(unaj_n_materias_aprobadas == "Entre 1 y 5" ~ "Hasta 10",
+                                                        unaj_n_materias_aprobadas == "Entre 6 y 10" ~ "Hasta 10",
+                                                        unaj_n_materias_aprobadas == "Entre 11 y 15" ~ "Más de 10",
+                                                        unaj_n_materias_aprobadas == "Entre 16 y 20" ~ "Más de 10",
+                                                        unaj_n_materias_aprobadas == "Entre 21 y 25" ~ "Más de 10"))
+
 # M?dulo materia Metodolog?a Cuantitativa
 
 df_encuesta <- df_encuesta |>

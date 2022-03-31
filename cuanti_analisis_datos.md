@@ -1,4 +1,57 @@
 ---
+title: "Diego Armando Datos"
+author: "Metodistas del Sur"
+date: "2022-03-30"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+# url: your book url like https://bookdown.org/yihui/bookdown
+# cover-image: path to the social sharing image like images/cover.jpg
+description: |
+  Informe que muestra opciones de análisis de datos básicas y complejas sobre un formulario de google forms analizado con el programa R. El mismo tiene fines pedagógicos más que académicos.
+biblio-style: apalike
+csl: chicago-fullnote-bibliography.csl
+---
+
+# url: your book url like https://bookdown.org/yihui/bookdown
+
+Placeholder
+
+
+
+<!--chapter:end:index.Rmd-->
+
+
+# Diseño de la encuesta
+
+Placeholder
+
+
+## Diseño del cuestionario
+## Diseño de la selección de casos
+
+<!--chapter:end:01-diseno.Rmd-->
+
+
+# Limpieza y consistencia de los datos {#cross}
+
+Placeholder
+
+
+## Limpieza
+
+<!--chapter:end:02-limpieza.Rmd-->
+
+
+# Análisis Espaciales
+
+Placeholder
+
+
+
+<!--chapter:end:03-geo.Rmd-->
+
+---
 output:
   pdf_document: default
   html_document: default
@@ -7,7 +60,8 @@ output:
 
 # Análisis de texto
 
-```{r librerias}
+
+```r
 # Levanto el dataset de la encuesta
 
 library(stringr)
@@ -17,10 +71,17 @@ library(hunspell) # Funciona mejor para el español. Uso la versión de desarrol
 #devtools::install_github("ropensci/hunspell", force = TRUE)
 library(purrr)
 library(tidyverse)
-           
+#> -- Attaching packages ------------------- tidyverse 1.3.1 --
+#> v ggplot2 3.3.5     v readr   2.1.2
+#> v tibble  3.1.6     v dplyr   1.0.8
+#> v tidyr   1.2.0     v forcats 0.5.1
+#> -- Conflicts ---------------------- tidyverse_conflicts() --
+#> x dplyr::filter() masks stats::filter()
+#> x dplyr::lag()    masks stats::lag()
 ```
 
-```{r insumo}
+
+```r
 # Levanto el dataset de la encuesta
 
 df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds"))
@@ -30,7 +91,8 @@ El insumo de estos análisis es una serie de preguntas de respuesta abierta. Sin
 
 En este caso se trata de 3 palabras por cada encuestado. Expresado en el léxico de una matriz de datos se trata de 3 columnas por cada fila. Para facilitar el siguiente análisis lo que primero debemos realizar es un "alargamiento" de la matriz de datos para tener una sola columna y más filas que, en principio, se repetirían 3 veces.
 
-```{r alargamiento}
+
+```r
 
 df_longer <- df_encuesta |>
              select(dni, 
@@ -49,7 +111,8 @@ df_longer <- df_encuesta |>
                       
 ```
 
-```{r cleaning_palabras_cuanti}
+
+```r
 
 # Comienzo el proceso de transformación desde cuanti_palabras a cuanti_palabras_ok
 # Se sacan los puntos
@@ -153,7 +216,8 @@ De este modo es como si se hubiera armado una clave para cada palabra.
 
 # Primeras aproximaciones
 
-```{r tabla_conteo}
+
+```r
 library(dplyr)
 conteo_palabras <- df_longer |>
 filter(!is.na(cuanti_palabras_pre_stem)) |>
@@ -166,7 +230,8 @@ group_by(hog_convivencia_hijes) |>
 
 # Nube de palabras
 
-```{r nube_general}
+
+```r
 library(ggwordcloud)
 ggplot(conteo_palabras, 
        aes(label = cuanti_palabras_pre_stem, size = n)) +
@@ -175,6 +240,8 @@ ggplot(conteo_palabras,
   theme_minimal() +
   facet_wrap(~hog_convivencia_hijes)
 ```
+
+<img src="04-text_files/figure-html/nube_general-1.png" width="672" />
 
 La nube de palabras (*wordcloud*)
 
@@ -193,3 +260,6 @@ The `bs4_book` theme makes footnotes appear inline when you click on them. In th
 The RStudio Visual Markdown Editor can also make it easier to insert citations: 
 
 [^text-1]: This is a footnote.
+
+<!--chapter:end:04-text.Rmd-->
+
