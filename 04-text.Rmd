@@ -13,7 +13,7 @@ library(tidyverse)
            
 ```
 
-```{r insumo}
+```{r insumo_text}
 # Levanto el dataset de la encuesta
 
 df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds"))
@@ -23,7 +23,7 @@ El insumo de estos análisis es una serie de preguntas de respuesta abierta. Sin
 
 En este caso se trata de 3 palabras por cada encuestado. Expresado en el léxico de una matriz de datos se trata de 3 columnas por cada fila. Para facilitar el siguiente análisis lo que primero debemos realizar es un "alargamiento" de la matriz de datos para tener una sola columna y más filas que, en principio, se repetirían 3 veces.
 
-```{r alargamiento}
+```{r longer_text}
 
 df_longer <- df_encuesta |>
              select(dni, 
@@ -146,11 +146,18 @@ De este modo es como si se hubiera armado una clave para cada palabra.
 
 ## Primeras aproximaciones
 
-```{r tabla_conteo}
+```{r tablas_conteos}
 library(dplyr)
+
+conteo_palabras_general <- df_longer |>
+filter(!is.na(cuanti_palabras_pre_stem)) |>
+  count(cuanti_palabras_pre_stem) |>
+  arrange(desc(n)) |>
+  filter(n > 2)
+
 conteo_palabras <- df_longer |>
 filter(!is.na(cuanti_palabras_pre_stem)) |>
-group_by(hog_convivencia_hijes) |>
+  group_by(hog_convivencia_hijes) |>
   count(cuanti_palabras_pre_stem) |>
   arrange(desc(n)) |>
   filter(n > 2)
