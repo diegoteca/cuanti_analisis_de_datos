@@ -23,6 +23,7 @@ drive_auth(email = "dquartullidocencia@gmail.com")
 # https://docs.google.com/forms/u/1/d/13mj2wN16HMaKtK0b0rbKEH4YyabCYZyO9P0qCoplisQ/edit?usp=send_form&usp=redirect_edit_m2
 
 # Descarga de archivo online ----
+# Es conveniente desde google drive dejar que la fecha de nacimiento sea "character"
 
 url <- "https://docs.google.com/spreadsheets/d/1kVxZnwLGlkqMSWvsO5G93EfujElhP8ZToJs-ki0rhwo/edit?resourcekey#gid=1385801546"
 
@@ -53,7 +54,7 @@ df_encuesta <- df_encuesta |>
                       genero = identidad_de_genero_autopercibida_en_la_actualidad,
                       fecha_nacimiento = indique_su_fecha_de_nacimiento,
                       estado_civil = actualmente_usted_esta) |>
-               mutate(fecha_nacimiento = ymd(fecha_nacimiento))
+               mutate(fecha_nacimiento = dmy(fecha_nacimiento))
 
 # M?dulo Hogar, presencia de padres e hijes ----
 

@@ -10,55 +10,95 @@ library(tidyverse)
 
 ```{r insumo_redes}
 # Levanto el dataset de la encuesta
-
-df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds"))
+# Pongo "redes_tu_nombre"como primera columna
+df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds")) |>
+               relocate(redes_tu_nombre)
 ```
 
 El insumo de estos análisis es una serie de preguntas en donde cada estudiante debe elegir, entre todos los estudiantes de ese cuatrimestre, a 5 a los que más conoce. Sin embargo, dado el formato específico de la pregunta se trata de un dato que, si bien no puede considerarse estructurado, se aleja un poco de otros ejemplos de datos no estructurados como los textos provenientes de entrevistas en profundidad, de canciones o de discursos presidenciales.
 
 En este caso se trata de 3 palabras por cada encuestado. Expresado en el léxico de una matriz de datos se trata de 3 columnas por cada fila. Para facilitar el siguiente análisis lo que primero debemos realizar es un "alargamiento" de la matriz de datos para tener una sola columna y más filas que, en principio, se repetirían 3 veces.
 
-```{r alargamiento_redes}
+```{r nodes}
+nodes <- df_encuesta |>
+relocate(redes_tu_nombre)
 
-redes_longer <- df_encuesta |>
-                select(redes_tu_nombre,
+```
+
+```{r edges}
+# Hay que realizar desde el archivo de la encuesta dos columnas (from, to) en donde
+# el "from" sea el encuestado "redes_tun_nombre" y que el "to" sea el estudiante a quien haya 
+# elegido. Dado que cada encuestado elige a 5 estudiantes en este nuevo objeto debería
+# haber 5 filas por encuestado.
+# Luego de eso se debería filtrar "los edges" para que queden sólo aquellos que están presentes
+# en el "nodes", esto es, con los que contestaron la encuesta.
+# 
+# Se podría agregar otras columnas al edge
+#       cuanti_comision,
+#                       unaj_ano_ingreso,
+#                       unaj_n_materias_aprobadas,
+#                       unaj_n_materias_aprobadas_10
+
+edges <- df_encuesta |>
+                select(mail,
+                       redes_tu_nombre,
                        redes_1_contacto,
                        redes_2_contacto,
                        redes_3_contacto,
                        redes_4_contacto,
-                       redes_5_contacto) |>
-                pivot_longer(c(redes_tu_nombre,
+                       redes_5_contacto,
+                       cuanti_docente,
+                       unaj_ano_ingreso,
+                       unaj_n_materias_aprobadas,
+                       unaj_n_materias_aprobadas_10) |>
+                pivot_longer(c(
                              redes_1_contacto,
                              redes_2_contacto,
                              redes_3_contacto,
                              redes_4_contacto,
                              redes_5_contacto),
-                             names_to = "to",
-                             values_to = "from")
-```
-```
-grafo <- as_tbl_graph(df_encuesta,
-                      directed = TRUE,
-                      names_to = )
-```
-
-
-```{r alargamiento_redes2}
-
-df_longer <- df_encuesta |>
-             select(dni, 
-                    unaj_ano_ingreso,
-                    unaj_n_materias_aprobadas,
-                    sexo,
-                    hog_convivencia_hijes,
-                    cuanti_1_palabra, 
-                    cuanti_2_palabra, 
-                    cuanti_3_palabra) |>
-             pivot_longer(c(cuanti_1_palabra,
-                          cuanti_2_palabra,
-                          cuanti_3_palabra),
-                          names_to = "orden_palabra",
-                          values_to = "cuanti_palabras")
-                      
+                             names_to = "orden_del_contacto",
+                             values_to = "to") |>
+mutate(intensidad_relacion = as.integer(case_when(orden_del_contacto == "redes_1_contacto" ~ "1",
+                                                     orden_del_contacto == "redes_2_contacto" ~ "2",
+                                                     orden_del_contacto == "redes_3_contacto" ~ "3",
+                                                     orden_del_contacto == "redes_4_contacto" ~ "4",
+                                                     orden_del_contacto == "redes_5_contacto" ~ "5"))) |>
+              select(!c(mail, orden_del_contacto)) |>
+              semi_join(nodes, by = c("to" = "redes_tu_nombre")) |>
+              rename(from = redes_tu_nombre) |>
+              relocate(to)
+          
 ```
 
+
+```{r red}
+# Creo la red 
+red <- tbl_graph(nodes = nodes,
+                 node_key = "redes_tu_nombre",
+                 edges = edges)
+```
+
+```{r red_comision_diego}
+red_diego <- red |>
+activate(nodes) |>
+filter(cuanti_docente == "Diego Quartulli")
+```
+```{r ggraph}
+graph <- ggraph(red, layout = "kk") + 
+  geom_edge_link() + 
+  geom_node_point()
+
+```
+```{r ggraph_diego}
+graph_diego <- ggraph(red_diego, layout = "kk", maxiter = 100) + 
+  geom_edge_link() + 
+  geom_node_point()
+graph_diego
+```
+```{r}
+graph <- ggraph(red, layout = "kk") + 
+  geom_edge_link() + 
+  geom_node_point(aes(colour = factor(cuanti_docente)))
+graph
+```
