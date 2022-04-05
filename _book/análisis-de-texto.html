@@ -65,7 +65,7 @@
 <h1>
 <span class="header-section-number">Capítulo 4</span> Análisis de texto<a class="anchor" aria-label="anchor" href="#an%C3%A1lisis-de-texto"><i class="fas fa-link"></i></a>
 </h1>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Levanto el dataset de la encuesta</span>
 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span>
@@ -76,13 +76,13 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
            </code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Levanto el dataset de la encuesta</span>
 
 <span class="va">df_encuesta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html">read_rds</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"Outputs"</span>, <span class="st">"df_encuesta.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>El insumo de estos análisis es una serie de preguntas de respuesta abierta. Sin embargo, dado el formato específico de la pregunta se trata de un dato que, si bien no puede considerarse estructurado, se aleja un poco de otros ejemplos de datos no estructurados como los textos provenientes de entrevistas en profundidad, de canciones o de discursos presidenciales.</p>
 <p>En este caso se trata de 3 palabras por cada encuestado. Expresado en el léxico de una matriz de datos se trata de 3 columnas por cada fila. Para facilitar el siguiente análisis lo que primero debemos realizar es un “alargamiento” de la matriz de datos para tener una sola columna y más filas que, en principio, se repetirían 3 veces.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_encuesta</span> |&gt;
              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">dni</span>, 
@@ -99,7 +99,7 @@
                           names_to <span class="op">=</span> <span class="st">"orden_palabra"</span>,
                           values_to <span class="op">=</span> <span class="st">"cuanti_palabras"</span><span class="op">)</span>
                       </code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># Comienzo el proceso de transformación desde cuanti_palabras a cuanti_palabras_ok</span>
 <span class="co"># Se sacan los puntos</span>
@@ -201,7 +201,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
 <h2>
 <span class="header-section-number">4.1</span> Primeras aproximaciones<a class="anchor" aria-label="anchor" href="#primeras-aproximaciones"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
 <span class="va">conteo_palabras_general</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
@@ -222,7 +222,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
 <h2>
 <span class="header-section-number">4.2</span> Nube de palabras<a class="anchor" aria-label="anchor" href="#nube-de-palabras"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lepennec/ggwordcloud">ggwordcloud</a></span><span class="op">)</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">conteo_palabras</span>, 
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">cuanti_palabras_pre_stem</span>, size <span class="op">=</span> <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -248,6 +248,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
 <p>The <code>bs4_book</code> theme makes footnotes appear inline when you click on them. In this example book, we added <code>csl: chicago-fullnote-bibliography.csl</code> to the <code>index.Rmd</code> YAML, and include the <code>.csl</code> file. To download a new style, we recommend:</p>
 <p>The RStudio Visual Markdown Editor can also make it easier to insert citations:</p>
 
+<hr>
 </div>
 </div>
 
@@ -279,7 +280,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Diego Armando Datos</strong>" fue escrito por Metodistas del Sur. Fue actualizado la última vez el 2022-04-04.</p>
+    <p>"<strong>Diego Armando Datos</strong>" fue escrito por Metodistas del Sur. Fue actualizado la última vez el 2022-04-05.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

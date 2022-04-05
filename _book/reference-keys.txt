@@ -10,3 +10,7 @@ nube-de-palabras
 footnotes
 citations
 análisis-de-redes
+insumo-de-la-encuesta
+breve-introducción-al-análisis-de-redes
+análisis-y-visualizaciones
+centralidades-de-los-estudiantes-y-sus-relaciones
