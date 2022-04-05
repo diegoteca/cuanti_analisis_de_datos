@@ -11,7 +11,8 @@ La idea de limpieza (*cleaning*) viene de usar la metáfora de dato sucio (*dirt
 La tarea básica de limpieza (*cleaning*) que se hará será el remombre de todas las variables. La razón de esta operación es que, al menos si se trabaja con google forms, los nombres de las variables son el texto de la propia pregunta del formulario. Esto incomoda un poco el análisis de los datos por la gran extensión de algunas preguntas y por lo problemático que a veces puede ser tener espacios en blanco en los nombres de las variables.
 
 ``` rmdcaution
-::: {.rmdcaution} The `bs4_book` style also includes an `.rmdnote` callout block
+::: {.rmdcaution} 
+The `bs4_book` style also includes an `.rmdnote` callout block
 like this one.:::
 ```
 
@@ -285,7 +286,12 @@ mutate(unaj_n_materias_aprobadas_10 = case_when(unaj_n_materias_aprobadas == "En
                                     unaj_n_materias_aprobadas == "Entre 6 y 10" ~ "Hasta 10",
                                     unaj_n_materias_aprobadas == "Entre 11 y 15" ~ "Más de 10",
                                     unaj_n_materias_aprobadas == "Entre 16 y 20" ~ "Más de 10",
-                                    unaj_n_materias_aprobadas == "Entre 21 y 25" ~ "Más de 10"))
+                                    unaj_n_materias_aprobadas == "Entre 21 y 25" ~ "Más de 10"),
+       unaj_n_materias_aprobadas_15 = case_when(unaj_n_materias_aprobadas == "Entre 1 y 5" ~ "Hasta 15",
+                                    unaj_n_materias_aprobadas == "Entre 6 y 10" ~ "Hasta 15",
+                                    unaj_n_materias_aprobadas == "Entre 11 y 15" ~ "Hasta 15",
+                                    unaj_n_materias_aprobadas == "Entre 16 y 20" ~ "Más de 15",
+                                    unaj_n_materias_aprobadas == "Entre 21 y 25" ~ "Más de 15"))
 
 # M?dulo materia Metodolog?a Cuantitativa
 

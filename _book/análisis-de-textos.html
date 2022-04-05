@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Page not found | Diego Armando Datos</title>
+<title>Capítulo 4 Análisis de textos | Diego Armando Datos</title>
 <meta name="author" content="Metodistas del Sur">
-<meta name="description" content="The page you requested cannot be found (perhaps it was moved or renamed). You may want to try searching to find the page's new location, or use the table of contents to find the page you are...">
+<meta name="description" content="# Levanto el dataset de la encuesta library(stringr) library(tidytext) library(hunspell) # Funciona mejor para el español. Uso la versión de desarrollo porque # funciona mejor los diccionario en...">
 <meta name="generator" content="bookdown 0.25.3 with bs4_book()">
-<meta property="og:title" content="Page not found | Diego Armando Datos">
+<meta property="og:title" content="Capítulo 4 Análisis de textos | Diego Armando Datos">
 <meta property="og:type" content="book">
-<meta property="og:description" content="The page you requested cannot be found (perhaps it was moved or renamed). You may want to try searching to find the page's new location, or use the table of contents to find the page you are...">
+<meta property="og:description" content="# Levanto el dataset de la encuesta library(stringr) library(tidytext) library(hunspell) # Funciona mejor para el español. Uso la versión de desarrollo porque # funciona mejor los diccionario en...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Page not found | Diego Armando Datos">
-<meta name="twitter:description" content="The page you requested cannot be found (perhaps it was moved or renamed). You may want to try searching to find the page's new location, or use the table of contents to find the page you are...">
+<meta name="twitter:title" content="Capítulo 4 Análisis de textos | Diego Armando Datos">
+<meta name="twitter:description" content="# Levanto el dataset de la encuesta library(stringr) library(tidytext) library(hunspell) # Funciona mejor para el español. Uso la versión de desarrollo porque # funciona mejor los diccionario en...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/_Lato-0.4.1/font.css" rel="stylesheet">
@@ -52,7 +52,7 @@
 <li><a class="" href="dise%C3%B1o-de-la-encuesta.html"><span class="header-section-number">1</span> Diseño de la encuesta</a></li>
 <li><a class="" href="cross.html"><span class="header-section-number">2</span> Limpieza y consistencia de los datos</a></li>
 <li><a class="" href="an%C3%A1lisis-espaciales.html"><span class="header-section-number">3</span> Análisis Espaciales</a></li>
-<li><a class="" href="an%C3%A1lisis-de-textos.html"><span class="header-section-number">4</span> Análisis de textos</a></li>
+<li><a class="active" href="an%C3%A1lisis-de-textos.html"><span class="header-section-number">4</span> Análisis de textos</a></li>
 <li><a class="" href="pregunta_textoan%C3%A1lisis-de-texto.html"><span class="header-section-number">5</span> Análisis de texto</a></li>
 <li><a class="" href="an%C3%A1lisis-de-redes.html"><span class="header-section-number">6</span> Análisis de redes</a></li>
 </ul>
@@ -62,18 +62,42 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="page-not-found" class="section level1">
-<h1>Page not found<a class="anchor" aria-label="anchor" href="#page-not-found"><i class="fas fa-link"></i></a>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="análisis-de-textos" class="section level1" number="4">
+<h1>
+<span class="header-section-number">Capítulo 4</span> Análisis de textos<a class="anchor" aria-label="anchor" href="#an%C3%A1lisis-de-textos"><i class="fas fa-link"></i></a>
 </h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Levanto el dataset de la encuesta</span>
+
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/juliasilge/tidytext">tidytext</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/hunspell/">hunspell</a></span><span class="op">)</span> <span class="co"># Funciona mejor para el español. Uso la versión de desarrollo porque</span>
+<span class="co"># funciona mejor los diccionario en rstudio</span>
+<span class="co">#devtools::install_github("ropensci/hunspell", force = TRUE)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+           </code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Levanto el dataset de la encuesta</span>
+
+<span class="va">df_encuesta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html">read_rds</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"Outputs"</span>, <span class="st">"df_encuesta.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>El insumo de estos análisis es una serie de preguntas de respuesta abierta. Sin embargo, dado el formato específico de la pregunta se trata de un dato que, si bien no puede considerarse estructurado, se aleja un poco de otros ejemplos de datos no estructurados como los textos provenientes de entrevistas en profundidad, de canciones o de discursos presidenciales.</p>
 </div>
   <div class="chapter-nav">
-<div class="empty"></div>
-<div class="empty"></div>
+<div class="prev"><a href="an%C3%A1lisis-espaciales.html"><span class="header-section-number">3</span> Análisis Espaciales</a></div>
+<div class="next"><a href="pregunta_textoan%C3%A1lisis-de-texto.html"><span class="header-section-number">5</span> Análisis de texto</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
-    </div>
+    <nav id="toc" data-toggle="toc" aria-label="Índice capítulo"><h2>Índice capítulo</h2>
+      <ul class="nav navbar-nav"><li><a class="nav-link" href="#an%C3%A1lisis-de-textos"><span class="header-section-number">4</span> Análisis de textos</a></li></ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/diegoteca/cuanti_analisis_de_datos/tree/main/_book/blob/master/04-text.Rmd">Ver fuente <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/diegoteca/cuanti_analisis_de_datos/tree/main/_book/edit/master/04-text.Rmd">Editar esta página <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
 
 </div>
 </div> <!-- .container -->

@@ -1,6 +1,10 @@
-# Análisis de texto
+---
+---
+---
 
-```{r librerias_texto}
+# Análisis de textos
+
+```{r text_librerias}
 # Levanto el dataset de la encuesta
 
 library(stringr)
@@ -13,7 +17,7 @@ library(tidyverse)
            
 ```
 
-```{r insumo_text}
+```{r text_insumo}
 # Levanto el dataset de la encuesta
 
 df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds"))
@@ -21,14 +25,21 @@ df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds"))
 
 El insumo de estos análisis es una serie de preguntas de respuesta abierta. Sin embargo, dado el formato específico de la pregunta se trata de un dato que, si bien no puede considerarse estructurado, se aleja un poco de otros ejemplos de datos no estructurados como los textos provenientes de entrevistas en profundidad, de canciones o de discursos presidenciales.
 
-En este caso se trata de 3 palabras por cada encuestado. Expresado en el léxico de una matriz de datos se trata de 3 columnas por cada fila. Para facilitar el siguiente análisis lo que primero debemos realizar es un "alargamiento" de la matriz de datos para tener una sola columna y más filas que, en principio, se repetirían 3 veces.
+# ![pregunta_texto](Inputs/Images/preguntas_texto.png){width="600"}
 
-```{r longer_text}
+En este caso, como puede observarse en la imagen se trata de 3 palabras por cada encuestado. Expresado en el léxico de una matriz de datos (o base de casos x variables), se trata de 3 columnas por cada fila.
+
+## Preparación de los datos
+
+Para facilitar el siguiente análisis lo que primero debemos realizar es un "alargamiento" de la base de datos original para pasar a tener una sola columna y más filas que, en principio, se repetirían 3 veces.
+
+```{r text_longer}
 
 df_longer <- df_encuesta |>
              select(dni, 
                     unaj_ano_ingreso,
-                    unaj_n_materias_aprobadas,
+                    unaj_n_materias_aprobadas_10,
+                    unaj_n_materias_aprobadas_15,
                     sexo,
                     hog_convivencia_hijes,
                     cuanti_1_palabra, 
@@ -42,6 +53,8 @@ df_longer <- df_encuesta |>
                       
 ```
 
+Luego, sigue el proceso de limpieza de las palabras. Se pasa todo a minúscula, se eliminan los puntos, los números y toda palabra vacía de significado como los pronombres, artículos y preposiciones. Finalmente se hace un proceso en donde se intenta llevar todas las palabras a su raíz (*stemming*) para así poder interpretar como una misma palabra a palabras que, por ejemplo, cambian el género (gato, gata) o el número (gato, gatos). Ahora sí, ya estamos en mejores condiciones de empezar nuestro análisis del texto.
+
 ```{r cleaning_palabras_cuanti}
 
 # Comienzo el proceso de transformación desde cuanti_palabras a cuanti_palabras_ok
@@ -53,13 +66,13 @@ df_longer <- df_encuesta |>
 
 # Se sacan las "s"
 # Se sacan las stopword (quanteda tiene uno bueno pero primera hay que token)
-# Tidytext tiene un wraping para lafuncion stopwprd del paquete stopwords
-# El proceso de stemming lo hago con hunspell en vez de snowball. 
+# Tidytext tiene un wraping para la funcion stopword del paquete stopwords
+# El proceso de stemming lo hago con hunspell en vez de que con snowball. 
 # 
 # Cambio a mano el diccionario de hunspell y luego lo especifico en el código
 
 # Creo in objeto con los stopword. Uso tidytext para hacer un antijoint pero la base de datos
-# sale del paquete stopwords que, a su turno, levante base de distintos lugares.
+# sale del paquete stopwords que, a su turno, levanta base de distintos lugares.
 # El stopword lo uso luego de poner las palabras en minúsculas
 
 cuanti_stopwords <- get_stopwords(language = "es", source = "nltk") |> # Por ahora nltk tiene más palabras
@@ -126,7 +139,9 @@ cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "métodos", "m�
 cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "cantidades", "cantidad"),
 cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "estadísticas", "estadística"),
 cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "encuestas", "encuesta"),
-cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "técnicas", "técnica"))      
+cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "técnicas", "técnica"),
+cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "porcentajes", "porcentaje"),
+cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "cuentas", "contar"))      
 
           
 #cuanti_palabras_ok = stringi::stri_trans_general(cuanti_palabras_ok, "Latin-ASCII")), # Saco los acentos
@@ -141,55 +156,121 @@ cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "técnicas", "t
 #cuanti_palabras_hunspell_check = hunspell_check(cuanti_palabras, dict = dictionary("es_ES")),
 ```
 
-De este modo es como si se hubiera armado una clave para cada palabra.
-
-
 ## Primeras aproximaciones
 
+Dado que los pasos anteriores nos permitieron estructurar bastante los datos, ahora es más fácil realizar los típicos análisis que se realizan a los datos estructurados. Para comenzar vamos a realizar una simple tabla de conteo, con su respectivo porcentaje, y luego vamos a realizar un gráfico de barras. Finalmente realizaremos una nube de palabras.
+
 ```{r tablas_conteos}
+
 library(dplyr)
+library(gt)
 
 conteo_palabras_general <- df_longer |>
 filter(!is.na(cuanti_palabras_pre_stem)) |>
   count(cuanti_palabras_pre_stem) |>
   arrange(desc(n)) |>
-  filter(n > 2)
+  filter(n > 1) |>
+  mutate(Porcentaje = n/sum(n))
 
-conteo_palabras <- df_longer |>
-filter(!is.na(cuanti_palabras_pre_stem)) |>
-  group_by(hog_convivencia_hijes) |>
-  count(cuanti_palabras_pre_stem) |>
-  arrange(desc(n)) |>
-  filter(n > 2)
+gt_palabras <- conteo_palabras_general |>
+  gt() |>
+  tab_header(title = "Frecuencia y porcentajes de palabras") |>
+  cols_label(cuanti_palabras_pre_stem = "Palabra",
+             n = "Cantidad") |>
+  fmt_percent(columns = Porcentaje)
+
+gt_palabras
+
+
         
+```
+
+Como en muchas otras situaciones, lo que se puede mostrar en forma de tabla también se puede graficar con algún tipo de gráfico. En este caso haremos un gráfico de barras con los datos anteriores.
+
+```{r grafico_conteo}
+library(ggplot2)
+
+grafico_conteo <- conteo_palabras_general |>
+mutate(cuanti_palabras_pre_stem = fct_reorder(cuanti_palabras_pre_stem, n)) |>
+ggplot(aes(cuanti_palabras_pre_stem, Porcentaje)) +
+       geom_col() + 
+      labs(x = "Palabras") +
+      scale_y_continuous(labels = scales::percent) +
+       coord_flip()
+       
+grafico_conteo
 ```
 
 ## Nube de palabras
 
-```{r nube_general}
+La nube de palabras es una técnica de visualización que funciona bien cuando los insumos son palabras y estan presentan una gran heterogeneidad en los valores de sus frecuencias.
+
+```{r text_nube_general}
+
 library(ggwordcloud)
-ggplot(conteo_palabras, 
-       aes(label = cuanti_palabras_pre_stem, size = n)) +
+
+nube_palabras <- ggplot(conteo_palabras_general, 
+       aes(label = cuanti_palabras_pre_stem, 
+           size = n,
+           color = n)) +
   geom_text_wordcloud(area_corr = TRUE) +
-  scale_size_area(max_size = 10) +
-  theme_minimal() +
-  facet_wrap(~hog_convivencia_hijes)
+  scale_size_area(max_size = 20) +
+  labs(title = "Nube de palabras") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+nube_palabras
 ```
 
-La nube de palabras (*wordcloud*)
+## Análisis bivariado de palabras
 
-## Footnotes
+```{r text_bivariado}
+# Es más cómodo "ensanchar" la base luego del análisis para facilitar la tabla
 
-Footnotes are put inside the square brackets after a caret `^[]`. Like this one [^text-1].
+conteo_palabras_grupo <- df_longer |>
+filter(!is.na(cuanti_palabras_pre_stem)) |>
+ group_by(unaj_n_materias_aprobadas_15) |>
+  count(cuanti_palabras_pre_stem) |>
+  arrange(desc(n)) |>
+  filter(n > 1) |>
+  mutate(Porcentaje = n/sum(n)) |>
+  select(!n) |>
+  pivot_wider(names_from = unaj_n_materias_aprobadas_15,
+              values_from = Porcentaje)
 
-## Citations
+gt_palabras_grupo <- conteo_palabras_grupo |>
+  gt() |>
+  tab_header(title = "Frecuencia y porcentajes de palabras según cantidad de materias aprobadas") |>
+  cols_label(cuanti_palabras_pre_stem = "Palabra") |>
+    tab_spanner(
+    label = "Cantidad de materias aprobadas",
+    columns = c("Hasta 15", "Más de 15")) |>
+  fmt_percent(columns = c("Hasta 15", "Más de 15"))
+              
 
-Reference items in your bibliography file(s) using `@key`.
+gt_palabras_grupo
+```
 
-For example, we are using the **bookdown** package [@R-bookdown] (check out the last code chunk in index.Rmd to see how this citation key was added) in this sample book, which was built on top of R Markdown and **knitr** [@xie2015] (this citation was added manually in an external file book.bib). Note that the `.bib` files need to be listed in the index.Rmd with the YAML `bibliography` key.
+```{r nube_palabras_grupo}
 
-The `bs4_book` theme makes footnotes appear inline when you click on them. In this example book, we added `csl: chicago-fullnote-bibliography.csl` to the `index.Rmd` YAML, and include the `.csl` file. To download a new style, we recommend: 
+conteo_palabras_grupo <- df_longer |>
+filter(!is.na(cuanti_palabras_pre_stem)) |>
+  group_by(unaj_n_materias_aprobadas_15) |>
+  count(cuanti_palabras_pre_stem) |>
+  arrange(desc(n)) |>
+  filter(n > 1) |>
+  mutate(Porcentaje = n/sum(n))
 
-The RStudio Visual Markdown Editor can also make it easier to insert citations: 
+ nube_palabras_grupo <- ggplot(conteo_palabras_grupo, 
+       aes(label = cuanti_palabras_pre_stem, 
+           size = n,
+           color = n)) +
+  geom_text_wordcloud(area_corr = TRUE) +
+  scale_size_area(max_size = 10) +
+  labs(title = "Nube de palabra según cantidad de materias aprobadas") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  facet_wrap(~unaj_n_materias_aprobadas_15)
+ 
+ nube_palabras_grupo
+```
 
-[^text-1]: This is a footnote.
+## 

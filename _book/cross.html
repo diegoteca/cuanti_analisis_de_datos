@@ -52,8 +52,9 @@
 <li><a class="" href="dise%C3%B1o-de-la-encuesta.html"><span class="header-section-number">1</span> Diseño de la encuesta</a></li>
 <li><a class="active" href="cross.html"><span class="header-section-number">2</span> Limpieza y consistencia de los datos</a></li>
 <li><a class="" href="an%C3%A1lisis-espaciales.html"><span class="header-section-number">3</span> Análisis Espaciales</a></li>
-<li><a class="" href="an%C3%A1lisis-de-texto.html"><span class="header-section-number">4</span> Análisis de texto</a></li>
-<li><a class="" href="an%C3%A1lisis-de-redes.html"><span class="header-section-number">5</span> Análisis de redes</a></li>
+<li><a class="" href="an%C3%A1lisis-de-textos.html"><span class="header-section-number">4</span> Análisis de textos</a></li>
+<li><a class="" href="pregunta_textoan%C3%A1lisis-de-texto.html"><span class="header-section-number">5</span> Análisis de texto</a></li>
+<li><a class="" href="an%C3%A1lisis-de-redes.html"><span class="header-section-number">6</span> Análisis de redes</a></li>
 </ul>
 
         <div class="book-extra">
@@ -73,7 +74,8 @@
 </h2>
 <p>La idea de limpieza (<em>cleaning</em>) viene de usar la metáfora de dato sucio (<em>dirty</em>). Un dato sucio no necesariamente es un dato incorrecto aunque sí se trata de un tipo de dato incómodo ya que dificulta el posterior análisis.</p>
 <p>La tarea básica de limpieza (<em>cleaning</em>) que se hará será el remombre de todas las variables. La razón de esta operación es que, al menos si se trabaja con google forms, los nombres de las variables son el texto de la propia pregunta del formulario. Esto incomoda un poco el análisis de los datos por la gran extensión de algunas preguntas y por lo problemático que a veces puede ser tener espacios en blanco en los nombres de las variables.</p>
-<pre class="rmdcaution"><code>::: {.rmdcaution} The `bs4_book` style also includes an `.rmdnote` callout block
+<pre class="rmdcaution"><code>::: {.rmdcaution} 
+The `bs4_book` style also includes an `.rmdnote` callout block
 like this one.:::</code></pre>
 <p>bdfb</p>
 <pre class="rmdimportant"><code> ::: {.rmdimportant}
@@ -365,7 +367,12 @@ unaj_progresar <span class="op">=</span> <span class="va">actualmente_sos_benefi
                                     <span class="va">unaj_n_materias_aprobadas</span> <span class="op">==</span> <span class="st">"Entre 6 y 10"</span> <span class="op">~</span> <span class="st">"Hasta 10"</span>,
                                     <span class="va">unaj_n_materias_aprobadas</span> <span class="op">==</span> <span class="st">"Entre 11 y 15"</span> <span class="op">~</span> <span class="st">"Más de 10"</span>,
                                     <span class="va">unaj_n_materias_aprobadas</span> <span class="op">==</span> <span class="st">"Entre 16 y 20"</span> <span class="op">~</span> <span class="st">"Más de 10"</span>,
-                                    <span class="va">unaj_n_materias_aprobadas</span> <span class="op">==</span> <span class="st">"Entre 21 y 25"</span> <span class="op">~</span> <span class="st">"Más de 10"</span><span class="op">)</span><span class="op">)</span>
+                                    <span class="va">unaj_n_materias_aprobadas</span> <span class="op">==</span> <span class="st">"Entre 21 y 25"</span> <span class="op">~</span> <span class="st">"Más de 10"</span><span class="op">)</span>,
+       unaj_n_materias_aprobadas_15 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span><span class="va">unaj_n_materias_aprobadas</span> <span class="op">==</span> <span class="st">"Entre 1 y 5"</span> <span class="op">~</span> <span class="st">"Hasta 15"</span>,
+                                    <span class="va">unaj_n_materias_aprobadas</span> <span class="op">==</span> <span class="st">"Entre 6 y 10"</span> <span class="op">~</span> <span class="st">"Hasta 15"</span>,
+                                    <span class="va">unaj_n_materias_aprobadas</span> <span class="op">==</span> <span class="st">"Entre 11 y 15"</span> <span class="op">~</span> <span class="st">"Hasta 15"</span>,
+                                    <span class="va">unaj_n_materias_aprobadas</span> <span class="op">==</span> <span class="st">"Entre 16 y 20"</span> <span class="op">~</span> <span class="st">"Más de 15"</span>,
+                                    <span class="va">unaj_n_materias_aprobadas</span> <span class="op">==</span> <span class="st">"Entre 21 y 25"</span> <span class="op">~</span> <span class="st">"Más de 15"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># M?dulo materia Metodolog?a Cuantitativa</span>
 
