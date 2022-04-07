@@ -4,15 +4,15 @@ diseño-de-la-selección-de-casos
 cross
 limpieza
 análisis-espaciales
+insumo-de-la-encuesta
 análisis-de-textos
-pregunta_texto
 preparación-de-los-datos
 primeras-aproximaciones
 nube-de-palabras
 análisis-bivariado-de-palabras
 section
 análisis-de-redes
-insumo-de-la-encuesta
+insumo-de-la-encuesta-1
 breve-introducción-al-análisis-de-redes
 análisis-y-visualizaciones
 centralidades-de-los-estudiantes-y-sus-relaciones

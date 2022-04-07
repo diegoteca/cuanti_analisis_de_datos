@@ -1,7 +1,3 @@
----
----
----
-
 # Análisis de textos
 
 ```{r text_librerias}
@@ -25,7 +21,7 @@ df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds"))
 
 El insumo de estos análisis es una serie de preguntas de respuesta abierta. Sin embargo, dado el formato específico de la pregunta se trata de un dato que, si bien no puede considerarse estructurado, se aleja un poco de otros ejemplos de datos no estructurados como los textos provenientes de entrevistas en profundidad, de canciones o de discursos presidenciales.
 
-# ![pregunta_texto](Inputs/Images/preguntas_texto.png){width="600"}
+![pregunta_texto](Inputs/Images/preguntas_texto.png){width="600"}
 
 En este caso, como puede observarse en la imagen se trata de 3 palabras por cada encuestado. Expresado en el léxico de una matriz de datos (o base de casos x variables), se trata de 3 columnas por cada fila.
 

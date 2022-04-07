@@ -12,6 +12,7 @@ library(mapview)
 library(here)
            
 ```
+
 ```{r geo_insumo}
 # Levanto el dataset de la encuesta
 
@@ -20,11 +21,17 @@ df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds"))
 
 Todos solemos tener intuiciones acerca de como el espacio influye en las decisiones de las personas. Por otro lado, la cartografía, que es la disciplina que se encarga de la confección de mapas, es una actividad milenaria. Sin embargo, desde hace relativamente pocas décadas se ha comenzado a difundir el uso de técnicas que, no sólo ubican a diferentes objetos en un mapa, sino que tambien, al mismo tiempo, permiten la realización de diferentes análisis específicamente espaciales.
 
-Los mapas, en general, son una representación gráfica basada en una proyección, que "proyecta" sobre un plano de 2 dimensiones (2D) una realidad tridimensional (3D). Esta representación permite hacer visible relaciones de distancia entre elementos en algún espacio. En particular, los mapas geográficos (o cartográficos) suponen unas propiedades métricas que dependen de la proyección utilizada, y posibilitan la toma de medidas de distancias, ángulos o superficies sobre él y su posterior (re)proyección a la realidad. 
+Los mapas, en general, son una representación gráfica basada en una proyección, que "proyecta" sobre un plano de 2 dimensiones (2D) una realidad tridimensional (3D). Esta representación permite hacer visible relaciones de distancia entre elementos en algún espacio. En particular, los mapas geográficos (o cartográficos) suponen unas propiedades métricas que dependen de la proyección utilizada, y posibilitan la toma de medidas de distancias, ángulos o superficies sobre él y su posterior (re)proyección a la realidad.
 
 En la antigüedad, cuando sólo se sabía la ubicación específica de pocos elementos (no había GPS), se confiaba en la representación gráfica realizada sobre un plano (mapa) construido sobre esas (pocas) ubicaciones conocidas y se calculaba la posición de los elementos todavía no posicionados, sea tanto una nueva ciudad conocida o la propia ubicación de un viajante.
 
-```{r geo_cleaning}
+## Insumo de la encuesta
+
+Los análisis que se muestran a continuación se basan en las siguientes preguntas de la encuesta:
+
+![pregunta_ubicacion_vivienda](Inputs/Images/pregunta_geo.png){width="600"}
+
+```{r geo_cleaning, include=FALSE}
 df_mapa <- df_encuesta |>
 select(dni,
        viv_calle,
@@ -39,7 +46,8 @@ mutate(viv_provincia = "Buenos Aires",
        viv_calle_ok = str_replace(viv_calle_ok, "[.][0-9]+$", ""), # Saco los decimales
        street = as.character(str_glue("{viv_altura} {viv_calle_ok}")))
 ```
-```{r geolocalizacion}
+
+```{r geolocalizacion, include=FALSE}
 geo <- geo(street = df_mapa$street,
         county = df_mapa$viv_partido,
         state = df_mapa$viv_provincia,
@@ -64,8 +72,9 @@ lat_long_sf <- lat_long |>
         filter(cuanti_docente == "Diego Quartulli") |>
         write_rds(here("Outputs","lat_long_sf.rds"))
 ```
-```{r geo_metricas}
-unaj <- data.frame(longitude = 58.267885007422926, 
+
+```{r geo_metricas, include=FALSE}
+unaj <- data.frame(longitude = -58.267885007422926, 
                    latitude = -34.7752210576336) |>
          st_as_sf(coords = c("longitude", "latitude"),
          crs = 4326,
@@ -91,19 +100,30 @@ centroide <- lat_long_sf |>
                
 ```
 
-```{r geo_mapa}
-mapview(unaj,
-        cex = 8,
-        col.regions = "blue") +
-mapview(lat_long_sf) +
-mapview(convex_hull) + 
+```{r distancias, include=FALSE}
+lat_long_sf <- lat_long_sf |>
+mutate(distancia = st_distance(geometry, unaj, by_element = TRUE))
+```
+
+```{r geo_mapa, include=FALSE}
+library(leaflet)
+library(leafpop)
+mapview(convex_hull,
+        layer.name = "Polígono Convexo") +
+mapview(lat_long_sf,
+        layer.name = "Estudiantes",
+        popup = popupTable(lat_long_sf,
+                            zcol = c("viv_calle.x",
+                                     "viv_altura.x",
+                                     "distancia"))) +
 mapview(centroide,
         cex = 8,
         color = "black",
-        col.regions = "red")
+        col.regions = "red") + 
+mapview(unaj,
+        cex = 8,
+        col.regions = "black") 
 # Ojo con mapview en bookdown. Hay que tener en cuenta el modo de compilación de
 # todos los RMD
           
 ```
-
-
