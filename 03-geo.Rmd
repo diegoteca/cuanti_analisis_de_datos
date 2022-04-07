@@ -105,7 +105,7 @@ lat_long_sf <- lat_long_sf |>
 mutate(distancia = st_distance(geometry, unaj, by_element = TRUE))
 ```
 
-```{r geo_mapa, include=FALSE}
+```{r geo_mapa, echo=FALSE}
 library(leaflet)
 library(leafpop)
 mapview(convex_hull,
