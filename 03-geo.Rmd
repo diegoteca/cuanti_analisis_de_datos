@@ -1,6 +1,6 @@
 # Análisis Espaciales
 
-```{r librerias_geo}
+```{r librerias_geo, include=FALSE}
 # Levanto el dataset de la encuesta
 
 library(dplyr)
@@ -13,7 +13,7 @@ library(here)
            
 ```
 
-```{r geo_insumo}
+```{r geo_insumo, include=FALSE}
 # Levanto el dataset de la encuesta
 
 df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds"))

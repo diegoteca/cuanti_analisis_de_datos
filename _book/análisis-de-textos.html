@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Capítulo 4 Análisis de textos | Diego Armando Datos</title>
 <meta name="author" content="Metodistas del Sur">
-<meta name="description" content="# Levanto el dataset de la encuesta library(stringr) library(tidytext) library(hunspell) # Funciona mejor para el español. Uso la versión de desarrollo porque # funciona mejor los diccionario en...">
+<meta name="description" content="El insumo de estos análisis es una serie de preguntas de respuesta abierta. Sin embargo, dado el formato específico de la pregunta se trata de un dato que, si bien no puede considerarse...">
 <meta name="generator" content="bookdown 0.25.3 with bs4_book()">
 <meta property="og:title" content="Capítulo 4 Análisis de textos | Diego Armando Datos">
 <meta property="og:type" content="book">
-<meta property="og:description" content="# Levanto el dataset de la encuesta library(stringr) library(tidytext) library(hunspell) # Funciona mejor para el español. Uso la versión de desarrollo porque # funciona mejor los diccionario en...">
+<meta property="og:description" content="El insumo de estos análisis es una serie de preguntas de respuesta abierta. Sin embargo, dado el formato específico de la pregunta se trata de un dato que, si bien no puede considerarse...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Capítulo 4 Análisis de textos | Diego Armando Datos">
-<meta name="twitter:description" content="# Levanto el dataset de la encuesta library(stringr) library(tidytext) library(hunspell) # Funciona mejor para el español. Uso la versión de desarrollo porque # funciona mejor los diccionario en...">
+<meta name="twitter:description" content="El insumo de estos análisis es una serie de preguntas de respuesta abierta. Sin embargo, dado el formato específico de la pregunta se trata de un dato que, si bien no puede considerarse...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/_Lato-0.4.1/font.css" rel="stylesheet">
@@ -65,21 +65,6 @@
 <h1>
 <span class="header-section-number">Capítulo 4</span> Análisis de textos<a class="anchor" aria-label="anchor" href="#an%C3%A1lisis-de-textos"><i class="fas fa-link"></i></a>
 </h1>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Levanto el dataset de la encuesta</span>
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/juliasilge/tidytext">tidytext</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/hunspell/">hunspell</a></span><span class="op">)</span> <span class="co"># Funciona mejor para el español. Uso la versión de desarrollo porque</span>
-<span class="co"># funciona mejor los diccionario en rstudio</span>
-<span class="co">#devtools::install_github("ropensci/hunspell", force = TRUE)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
-           </code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Levanto el dataset de la encuesta</span>
-
-<span class="va">df_encuesta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html">read_rds</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"Outputs"</span>, <span class="st">"df_encuesta.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>El insumo de estos análisis es una serie de preguntas de respuesta abierta. Sin embargo, dado el formato específico de la pregunta se trata de un dato que, si bien no puede considerarse estructurado, se aleja un poco de otros ejemplos de datos no estructurados como los textos provenientes de entrevistas en profundidad, de canciones o de discursos presidenciales.</p>
 <div class="figure">
 <img src="Inputs/Images/preguntas_texto.png" width="600" alt=""><p class="caption">pregunta_texto</p>
@@ -90,156 +75,19 @@
 <span class="header-section-number">4.1</span> Preparación de los datos<a class="anchor" aria-label="anchor" href="#preparaci%C3%B3n-de-los-datos"><i class="fas fa-link"></i></a>
 </h2>
 <p>Para facilitar el siguiente análisis lo que primero debemos realizar es un “alargamiento” de la base de datos original para pasar a tener una sola columna y más filas que, en principio, se repetirían 3 veces.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_encuesta</span> |&gt;
-             <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">dni</span>, 
-                    <span class="va">unaj_ano_ingreso</span>,
-                    <span class="va">unaj_n_materias_aprobadas_10</span>,
-                    <span class="va">unaj_n_materias_aprobadas_15</span>,
-                    <span class="va">sexo</span>,
-                    <span class="va">hog_convivencia_hijes</span>,
-                    <span class="va">cuanti_1_palabra</span>, 
-                    <span class="va">cuanti_2_palabra</span>, 
-                    <span class="va">cuanti_3_palabra</span><span class="op">)</span> |&gt;
-             <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">cuanti_1_palabra</span>,
-                          <span class="va">cuanti_2_palabra</span>,
-                          <span class="va">cuanti_3_palabra</span><span class="op">)</span>,
-                          names_to <span class="op">=</span> <span class="st">"orden_palabra"</span>,
-                          values_to <span class="op">=</span> <span class="st">"cuanti_palabras"</span><span class="op">)</span>
-                      </code></pre></div>
 <p>Luego, sigue el proceso de limpieza de las palabras. Se pasa todo a minúscula, se eliminan los puntos, los números y toda palabra vacía de significado como los pronombres, artículos y preposiciones. Finalmente se hace un proceso en donde se intenta llevar todas las palabras a su raíz (<em>stemming</em>) para así poder interpretar como una misma palabra a palabras que, por ejemplo, cambian el género (gato, gata) o el número (gato, gatos). Ahora sí, ya estamos en mejores condiciones de empezar nuestro análisis del texto.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co"># Comienzo el proceso de transformación desde cuanti_palabras a cuanti_palabras_ok</span>
-<span class="co"># Se sacan los puntos</span>
-<span class="co"># Se pasa todo a minúscula. Es importante porque el stemming y las stopword funcionan mejor</span>
-<span class="co"># Se sacan las stopwords</span>
-<span class="co"># Se hace el stemming</span>
-<span class="co"># Se sacan los acentos. Esto va a lo último porque modifica el stemming.</span>
-
-<span class="co"># Se sacan las "s"</span>
-<span class="co"># Se sacan las stopword (quanteda tiene uno bueno pero primera hay que token)</span>
-<span class="co"># Tidytext tiene un wraping para la funcion stopword del paquete stopwords</span>
-<span class="co"># El proceso de stemming lo hago con hunspell en vez de que con snowball. </span>
-<span class="co"># </span>
-<span class="co"># Cambio a mano el diccionario de hunspell y luego lo especifico en el código</span>
-
-<span class="co"># Creo in objeto con los stopword. Uso tidytext para hacer un antijoint pero la base de datos</span>
-<span class="co"># sale del paquete stopwords que, a su turno, levanta base de distintos lugares.</span>
-<span class="co"># El stopword lo uso luego de poner las palabras en minúsculas</span>
-
-<span class="va">cuanti_stopwords</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/get_stopwords.html">get_stopwords</a></span><span class="op">(</span>language <span class="op">=</span> <span class="st">"es"</span>, source <span class="op">=</span> <span class="st">"nltk"</span><span class="op">)</span> |&gt; <span class="co"># Por ahora nltk tiene más palabras</span>
-                    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>cuanti_stopwords <span class="op">=</span> <span class="va">word</span><span class="op">)</span>
-
-<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
-cuanti_palabras_ok <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras</span>, <span class="st">"[.]+$"</span>, <span class="st">""</span><span class="op">)</span>, <span class="co"># Saco los puntos</span>
-cuanti_palabras_ok <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_lower</a></span><span class="op">(</span><span class="va">cuanti_palabras_ok</span><span class="op">)</span><span class="op">)</span> <span class="co"># Todo a minuscula</span>
-
-<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt; 
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join</a></span><span class="op">(</span><span class="va">cuanti_stopwords</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cuanti_palabras_ok"</span> <span class="op">=</span> <span class="st">"cuanti_stopwords"</span><span class="op">)</span><span class="op">)</span> <span class="co"># Stopwords</span>
-
-<span class="co"># Antes del stemming pruebo con el corrector de palabras</span>
-<span class="co"># </span>
-<span class="co"># Si previamente el (nuevo) diccionario ya está creado se buscar como un nuevo lenguaje de diccionario</span>
-<span class="co"># Me sirve para stemming</span>
-
-<span class="va">cuanti_diccionario</span> <span class="op">&lt;-</span> <span class="fu">hunspell</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/hunspell/reference/hunspell.html">dictionary</a></span><span class="op">(</span>lang <span class="op">=</span> <span class="st">"es_ES_delta"</span><span class="op">)</span>
-
-<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
-cuanti_palabras_analyze <span class="op">=</span> <span class="fu"><a href="https://docs.ropensci.org/hunspell/reference/hunspell.html">hunspell_analyze</a></span><span class="op">(</span><span class="va">cuanti_palabras_ok</span>, <span class="va">cuanti_diccionario</span><span class="op">)</span>,
-cuanti_palabras_check <span class="op">=</span> <span class="fu"><a href="https://docs.ropensci.org/hunspell/reference/hunspell.html">hunspell_check</a></span><span class="op">(</span><span class="va">cuanti_palabras_ok</span>, <span class="va">cuanti_diccionario</span><span class="op">)</span>,
-cuanti_palabras_suggest <span class="op">=</span> <span class="fu"><a href="https://docs.ropensci.org/hunspell/reference/hunspell.html">hunspell_suggest</a></span><span class="op">(</span><span class="va">cuanti_palabras_ok</span>, <span class="va">cuanti_diccionario</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># La idea es la siguiente:</span>
-<span class="co"># Si el check dió false, va la (única) palabra que salió en suggest.</span>
-<span class="co"># Si el check dió true, va la primera palabra de la lista</span>
-
-<span class="co">#df_longer$cuanti_palabras_suggest #df_longer$cuanti_palabras_suggest[sapply(length(df_longer$cuanti_palabras_suggest == 0))] #if_else(df_longer$cuanti_palabras_suggest[sapply(length(df_longer$cuanti_palabras_suggest == 0))],</span>
-         <span class="co">#                                   NA,</span>
-<span class="co">#                                            cuanti_palabras_suggest)</span>
-
-<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">cuanti_palabras_suggest</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">df_longer</span><span class="op">$</span><span class="va">cuanti_palabras_pre_stem</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">df_longer</span><span class="op">$</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="va">is.null</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
-
-<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Stemming</span>
-<span class="co"># Así como para las stopwords hice un archivo específico ahora hago un</span>
-<span class="co"># diccionario que agrega más palabras al original</span>
-<span class="co"># Hay que tener cuidado porque "quanteda" pisa a dictionary de "hunspell"</span>
-
-<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cuanti_palabras_stem <span class="op">=</span> <span class="fu"><a href="https://docs.ropensci.org/hunspell/reference/hunspell.html">hunspell_stem</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, dict <span class="op">=</span> <span class="va">cuanti_diccionario</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cuanti_palabras_stem <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">cuanti_palabras_stem</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">df_longer</span><span class="op">$</span><span class="va">cuanti_palabras_stem</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">df_longer</span><span class="op">$</span><span class="va">cuanti_palabras_stem</span>, <span class="va">is.null</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
-
-<span class="va">df_longer</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cuanti_palabras_stem <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">cuanti_palabras_stem</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Arreglo a mano algunos pequeños casos</span>
-
-<span class="va">df_longer</span> <span class="op">&lt;-</span>  <span class="va">df_longer</span> |&gt;
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
-cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="st">"métodos"</span>, <span class="st">"método"</span><span class="op">)</span>,
-cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="st">"cantidades"</span>, <span class="st">"cantidad"</span><span class="op">)</span>,
-cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="st">"estadísticas"</span>, <span class="st">"estadística"</span><span class="op">)</span>,
-cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="st">"encuestas"</span>, <span class="st">"encuesta"</span><span class="op">)</span>,
-cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="st">"técnicas"</span>, <span class="st">"técnica"</span><span class="op">)</span>,
-cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="st">"porcentajes"</span>, <span class="st">"porcentaje"</span><span class="op">)</span>,
-cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="st">"cuentas"</span>, <span class="st">"contar"</span><span class="op">)</span><span class="op">)</span>      
-
-          
-<span class="co">#cuanti_palabras_ok = stringi::stri_trans_general(cuanti_palabras_ok, "Latin-ASCII")), # Saco los acentos</span>
-
-<span class="co">#df_longer &lt;- df_longer |&gt;</span>
-<span class="co">#mutate(</span>
-<span class="co">#cuanti_palabras_hunspell = hunspell_stem(cuanti_palabras_ok, dict = cuanti_diccionario))</span>
-
-
-<span class="co">#cuanti_palabras_snowballc = wordStem(cuanti_palabras, language = "spanish"))</span>
-
-<span class="co">#cuanti_palabras_hunspell_check = hunspell_check(cuanti_palabras, dict = dictionary("es_ES")),</span></code></pre></div>
 </div>
 <div id="primeras-aproximaciones" class="section level2" number="4.2">
 <h2>
 <span class="header-section-number">4.2</span> Primeras aproximaciones<a class="anchor" aria-label="anchor" href="#primeras-aproximaciones"><i class="fas fa-link"></i></a>
 </h2>
 <p>Dado que los pasos anteriores nos permitieron estructurar bastante los datos, ahora es más fácil realizar los típicos análisis que se realizan a los datos estructurados. Para comenzar vamos a realizar una simple tabla de conteo, con su respectivo porcentaje, y luego vamos a realizar un gráfico de barras. Finalmente realizaremos una nube de palabras.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com/">gt</a></span><span class="op">)</span>
-
-<span class="va">conteo_palabras_general</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span><span class="op">)</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Porcentaje <span class="op">=</span> <span class="va">n</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">gt_palabras</span> <span class="op">&lt;-</span> <span class="va">conteo_palabras_general</span> |&gt;
-  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html">gt</a></span><span class="op">(</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Frecuencia y porcentajes de palabras"</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://gt.rstudio.com/reference/cols_label.html">cols_label</a></span><span class="op">(</span>cuanti_palabras_pre_stem <span class="op">=</span> <span class="st">"Palabra"</span>,
-             n <span class="op">=</span> <span class="st">"Cantidad"</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_percent.html">fmt_percent</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">Porcentaje</span><span class="op">)</span>
-
-<span class="va">gt_palabras</span></code></pre></div>
-<div id="qixfsiwizu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="saoeshlzub" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#qixfsiwizu .gt_table {
+#saoeshlzub .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -264,7 +112,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-left-color: #D3D3D3;
 }
 
-#qixfsiwizu .gt_heading {
+#saoeshlzub .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -276,7 +124,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-right-color: #D3D3D3;
 }
 
-#qixfsiwizu .gt_title {
+#saoeshlzub .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -288,7 +136,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-bottom-width: 0;
 }
 
-#qixfsiwizu .gt_subtitle {
+#saoeshlzub .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -300,13 +148,13 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-top-width: 0;
 }
 
-#qixfsiwizu .gt_bottom_border {
+#saoeshlzub .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qixfsiwizu .gt_col_headings {
+#saoeshlzub .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -321,7 +169,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-right-color: #D3D3D3;
 }
 
-#qixfsiwizu .gt_col_heading {
+#saoeshlzub .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -341,7 +189,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   overflow-x: hidden;
 }
 
-#qixfsiwizu .gt_column_spanner_outer {
+#saoeshlzub .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -353,15 +201,15 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   padding-right: 4px;
 }
 
-#qixfsiwizu .gt_column_spanner_outer:first-child {
+#saoeshlzub .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qixfsiwizu .gt_column_spanner_outer:last-child {
+#saoeshlzub .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qixfsiwizu .gt_column_spanner {
+#saoeshlzub .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -373,7 +221,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   width: 100%;
 }
 
-#qixfsiwizu .gt_group_heading {
+#saoeshlzub .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -398,7 +246,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   vertical-align: middle;
 }
 
-#qixfsiwizu .gt_empty_group_heading {
+#saoeshlzub .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -413,15 +261,15 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   vertical-align: middle;
 }
 
-#qixfsiwizu .gt_from_md > :first-child {
+#saoeshlzub .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qixfsiwizu .gt_from_md > :last-child {
+#saoeshlzub .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qixfsiwizu .gt_row {
+#saoeshlzub .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -440,7 +288,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   overflow-x: hidden;
 }
 
-#qixfsiwizu .gt_stub {
+#saoeshlzub .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -453,7 +301,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   padding-right: 5px;
 }
 
-#qixfsiwizu .gt_stub_row_group {
+#saoeshlzub .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -467,11 +315,11 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   vertical-align: top;
 }
 
-#qixfsiwizu .gt_row_group_first td {
+#saoeshlzub .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qixfsiwizu .gt_summary_row {
+#saoeshlzub .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -481,16 +329,16 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   padding-right: 5px;
 }
 
-#qixfsiwizu .gt_first_summary_row {
+#saoeshlzub .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qixfsiwizu .gt_first_summary_row.thick {
+#saoeshlzub .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qixfsiwizu .gt_last_summary_row {
+#saoeshlzub .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -500,7 +348,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-bottom-color: #D3D3D3;
 }
 
-#qixfsiwizu .gt_grand_summary_row {
+#saoeshlzub .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -510,7 +358,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   padding-right: 5px;
 }
 
-#qixfsiwizu .gt_first_grand_summary_row {
+#saoeshlzub .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -520,11 +368,11 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-top-color: #D3D3D3;
 }
 
-#qixfsiwizu .gt_striped {
+#saoeshlzub .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qixfsiwizu .gt_table_body {
+#saoeshlzub .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -533,7 +381,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-bottom-color: #D3D3D3;
 }
 
-#qixfsiwizu .gt_footnotes {
+#saoeshlzub .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -547,7 +395,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-right-color: #D3D3D3;
 }
 
-#qixfsiwizu .gt_footnote {
+#saoeshlzub .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -556,7 +404,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   padding-right: 5px;
 }
 
-#qixfsiwizu .gt_sourcenotes {
+#saoeshlzub .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -570,7 +418,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-right-color: #D3D3D3;
 }
 
-#qixfsiwizu .gt_sourcenote {
+#saoeshlzub .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -578,60 +426,60 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   padding-right: 5px;
 }
 
-#qixfsiwizu .gt_left {
+#saoeshlzub .gt_left {
   text-align: left;
 }
 
-#qixfsiwizu .gt_center {
+#saoeshlzub .gt_center {
   text-align: center;
 }
 
-#qixfsiwizu .gt_right {
+#saoeshlzub .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qixfsiwizu .gt_font_normal {
+#saoeshlzub .gt_font_normal {
   font-weight: normal;
 }
 
-#qixfsiwizu .gt_font_bold {
+#saoeshlzub .gt_font_bold {
   font-weight: bold;
 }
 
-#qixfsiwizu .gt_font_italic {
+#saoeshlzub .gt_font_italic {
   font-style: italic;
 }
 
-#qixfsiwizu .gt_super {
+#saoeshlzub .gt_super {
   font-size: 65%;
 }
 
-#qixfsiwizu .gt_footnote_marks {
+#saoeshlzub .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#qixfsiwizu .gt_asterisk {
+#saoeshlzub .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qixfsiwizu .gt_slash_mark {
+#saoeshlzub .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#qixfsiwizu .gt_fraction_numerator {
+#saoeshlzub .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#qixfsiwizu .gt_fraction_denominator {
+#saoeshlzub .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -650,129 +498,117 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
 <tr>
 <td class="gt_row gt_left">investigación</td>
 <td class="gt_row gt_right">38</td>
-<td class="gt_row gt_right">22.62%</td>
+<td class="gt_row gt_right">22.22%</td>
+</tr>
+<tr>
+<td class="gt_row gt_left">método</td>
+<td class="gt_row gt_right">20</td>
+<td class="gt_row gt_right">11.70%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">encuesta</td>
 <td class="gt_row gt_right">19</td>
-<td class="gt_row gt_right">11.31%</td>
-</tr>
-<tr>
-<td class="gt_row gt_left">método</td>
-<td class="gt_row gt_right">19</td>
-<td class="gt_row gt_right">11.31%</td>
+<td class="gt_row gt_right">11.11%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">estadística</td>
 <td class="gt_row gt_right">18</td>
-<td class="gt_row gt_right">10.71%</td>
+<td class="gt_row gt_right">10.53%</td>
+</tr>
+<tr>
+<td class="gt_row gt_left">cantidad</td>
+<td class="gt_row gt_right">10</td>
+<td class="gt_row gt_right">5.85%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">numeros</td>
 <td class="gt_row gt_right">10</td>
-<td class="gt_row gt_right">5.95%</td>
-</tr>
-<tr>
-<td class="gt_row gt_left">cantidad</td>
-<td class="gt_row gt_right">9</td>
-<td class="gt_row gt_right">5.36%</td>
+<td class="gt_row gt_right">5.85%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">datos</td>
 <td class="gt_row gt_right">9</td>
-<td class="gt_row gt_right">5.36%</td>
+<td class="gt_row gt_right">5.26%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">conocimiento</td>
 <td class="gt_row gt_right">6</td>
-<td class="gt_row gt_right">3.57%</td>
+<td class="gt_row gt_right">3.51%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">porcentaje</td>
 <td class="gt_row gt_right">6</td>
-<td class="gt_row gt_right">3.57%</td>
+<td class="gt_row gt_right">3.51%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">contar</td>
 <td class="gt_row gt_right">4</td>
-<td class="gt_row gt_right">2.38%</td>
+<td class="gt_row gt_right">2.34%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">técnica</td>
 <td class="gt_row gt_right">4</td>
-<td class="gt_row gt_right">2.38%</td>
+<td class="gt_row gt_right">2.34%</td>
+</tr>
+<tr>
+<td class="gt_row gt_left">científico</td>
+<td class="gt_row gt_right">3</td>
+<td class="gt_row gt_right">1.75%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">herramientas</td>
 <td class="gt_row gt_right">3</td>
-<td class="gt_row gt_right">1.79%</td>
+<td class="gt_row gt_right">1.75%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">información</td>
 <td class="gt_row gt_right">3</td>
-<td class="gt_row gt_right">1.79%</td>
+<td class="gt_row gt_right">1.75%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">medición</td>
 <td class="gt_row gt_right">3</td>
-<td class="gt_row gt_right">1.79%</td>
+<td class="gt_row gt_right">1.75%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">practica</td>
 <td class="gt_row gt_right">3</td>
-<td class="gt_row gt_right">1.79%</td>
+<td class="gt_row gt_right">1.75%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">análisis</td>
 <td class="gt_row gt_right">2</td>
-<td class="gt_row gt_right">1.19%</td>
-</tr>
-<tr>
-<td class="gt_row gt_left">científico</td>
-<td class="gt_row gt_right">2</td>
-<td class="gt_row gt_right">1.19%</td>
+<td class="gt_row gt_right">1.17%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">difícil</td>
 <td class="gt_row gt_right">2</td>
-<td class="gt_row gt_right">1.19%</td>
+<td class="gt_row gt_right">1.17%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">estudios</td>
 <td class="gt_row gt_right">2</td>
-<td class="gt_row gt_right">1.19%</td>
+<td class="gt_row gt_right">1.17%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">objetivos</td>
 <td class="gt_row gt_right">2</td>
-<td class="gt_row gt_right">1.19%</td>
+<td class="gt_row gt_right">1.17%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">personas</td>
 <td class="gt_row gt_right">2</td>
-<td class="gt_row gt_right">1.19%</td>
+<td class="gt_row gt_right">1.17%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">proyecto</td>
 <td class="gt_row gt_right">2</td>
-<td class="gt_row gt_right">1.19%</td>
+<td class="gt_row gt_right">1.17%</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <p>Como en muchas otras situaciones, lo que se puede mostrar en forma de tabla también se puede graficar con algún tipo de gráfico. En este caso haremos un gráfico de barras con los datos anteriores.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-
-<span class="va">grafico_conteo</span> <span class="op">&lt;-</span> <span class="va">conteo_palabras_general</span> |&gt;
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> |&gt;
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span>, <span class="va">Porcentaje</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Palabras"</span><span class="op">)</span> <span class="op">+</span>
-      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_percent.html">percent</a></span><span class="op">)</span> <span class="op">+</span>
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span>
-       
-<span class="va">grafico_conteo</span></code></pre></div>
 <div class="inline-figure"><img src="cuanti_analisis_datos_files/figure-html/grafico_conteo-1.png" width="672"></div>
 </div>
 <div id="nube-de-palabras" class="section level2" number="4.3">
@@ -780,57 +616,18 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
 <span class="header-section-number">4.3</span> Nube de palabras<a class="anchor" aria-label="anchor" href="#nube-de-palabras"><i class="fas fa-link"></i></a>
 </h2>
 <p>La nube de palabras es una técnica de visualización que funciona bien cuando los insumos son palabras y estan presentan una gran heterogeneidad en los valores de sus frecuencias.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lepennec/ggwordcloud">ggwordcloud</a></span><span class="op">)</span>
-
-<span class="va">nube_palabras</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">conteo_palabras_general</span>, 
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">cuanti_palabras_pre_stem</span>, 
-           size <span class="op">=</span> <span class="va">n</span>,
-           color <span class="op">=</span> <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://lepennec.github.io/ggwordcloud/reference/geom_text_wordcloud.html">geom_text_wordcloud</a></span><span class="op">(</span>area_corr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html">scale_size_area</a></span><span class="op">(</span>max_size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Nube de palabras"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">nube_palabras</span></code></pre></div>
 <div class="inline-figure"><img src="cuanti_analisis_datos_files/figure-html/text_nube_general-1.png" width="672"></div>
 </div>
 <div id="análisis-bivariado-de-palabras" class="section level2" number="4.4">
 <h2>
 <span class="header-section-number">4.4</span> Análisis bivariado de palabras<a class="anchor" aria-label="anchor" href="#an%C3%A1lisis-bivariado-de-palabras"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Es más cómodo "ensanchar" la base luego del análisis para facilitar la tabla</span>
-
-<span class="va">conteo_palabras_grupo</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span><span class="op">)</span><span class="op">)</span> |&gt;
- <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">unaj_n_materias_aprobadas_15</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Porcentaje <span class="op">=</span> <span class="va">n</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">!</span><span class="va">n</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">unaj_n_materias_aprobadas_15</span>,
-              values_from <span class="op">=</span> <span class="va">Porcentaje</span><span class="op">)</span>
-
-<span class="va">gt_palabras_grupo</span> <span class="op">&lt;-</span> <span class="va">conteo_palabras_grupo</span> |&gt;
-  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html">gt</a></span><span class="op">(</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Frecuencia y porcentajes de palabras según cantidad de materias aprobadas"</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://gt.rstudio.com/reference/cols_label.html">cols_label</a></span><span class="op">(</span>cuanti_palabras_pre_stem <span class="op">=</span> <span class="st">"Palabra"</span><span class="op">)</span> |&gt;
-    <span class="fu"><a href="https://gt.rstudio.com/reference/tab_spanner.html">tab_spanner</a></span><span class="op">(</span>
-    label <span class="op">=</span> <span class="st">"Cantidad de materias aprobadas"</span>,
-    columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Hasta 15"</span>, <span class="st">"Más de 15"</span><span class="op">)</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_percent.html">fmt_percent</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Hasta 15"</span>, <span class="st">"Más de 15"</span><span class="op">)</span><span class="op">)</span>
-              
-
-<span class="va">gt_palabras_grupo</span></code></pre></div>
-<div id="rfrvrcekei" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="janqwjtfzn" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#rfrvrcekei .gt_table {
+#janqwjtfzn .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -855,7 +652,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-left-color: #D3D3D3;
 }
 
-#rfrvrcekei .gt_heading {
+#janqwjtfzn .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -867,7 +664,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-right-color: #D3D3D3;
 }
 
-#rfrvrcekei .gt_title {
+#janqwjtfzn .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -879,7 +676,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-bottom-width: 0;
 }
 
-#rfrvrcekei .gt_subtitle {
+#janqwjtfzn .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -891,13 +688,13 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-top-width: 0;
 }
 
-#rfrvrcekei .gt_bottom_border {
+#janqwjtfzn .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#rfrvrcekei .gt_col_headings {
+#janqwjtfzn .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -912,7 +709,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-right-color: #D3D3D3;
 }
 
-#rfrvrcekei .gt_col_heading {
+#janqwjtfzn .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -932,7 +729,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   overflow-x: hidden;
 }
 
-#rfrvrcekei .gt_column_spanner_outer {
+#janqwjtfzn .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -944,15 +741,15 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   padding-right: 4px;
 }
 
-#rfrvrcekei .gt_column_spanner_outer:first-child {
+#janqwjtfzn .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#rfrvrcekei .gt_column_spanner_outer:last-child {
+#janqwjtfzn .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#rfrvrcekei .gt_column_spanner {
+#janqwjtfzn .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -964,7 +761,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   width: 100%;
 }
 
-#rfrvrcekei .gt_group_heading {
+#janqwjtfzn .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -989,7 +786,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   vertical-align: middle;
 }
 
-#rfrvrcekei .gt_empty_group_heading {
+#janqwjtfzn .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1004,15 +801,15 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   vertical-align: middle;
 }
 
-#rfrvrcekei .gt_from_md > :first-child {
+#janqwjtfzn .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#rfrvrcekei .gt_from_md > :last-child {
+#janqwjtfzn .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#rfrvrcekei .gt_row {
+#janqwjtfzn .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1031,7 +828,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   overflow-x: hidden;
 }
 
-#rfrvrcekei .gt_stub {
+#janqwjtfzn .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1044,7 +841,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   padding-right: 5px;
 }
 
-#rfrvrcekei .gt_stub_row_group {
+#janqwjtfzn .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1058,11 +855,11 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   vertical-align: top;
 }
 
-#rfrvrcekei .gt_row_group_first td {
+#janqwjtfzn .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#rfrvrcekei .gt_summary_row {
+#janqwjtfzn .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1072,16 +869,16 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   padding-right: 5px;
 }
 
-#rfrvrcekei .gt_first_summary_row {
+#janqwjtfzn .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#rfrvrcekei .gt_first_summary_row.thick {
+#janqwjtfzn .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#rfrvrcekei .gt_last_summary_row {
+#janqwjtfzn .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1091,7 +888,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-bottom-color: #D3D3D3;
 }
 
-#rfrvrcekei .gt_grand_summary_row {
+#janqwjtfzn .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1101,7 +898,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   padding-right: 5px;
 }
 
-#rfrvrcekei .gt_first_grand_summary_row {
+#janqwjtfzn .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1111,11 +908,11 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-top-color: #D3D3D3;
 }
 
-#rfrvrcekei .gt_striped {
+#janqwjtfzn .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#rfrvrcekei .gt_table_body {
+#janqwjtfzn .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1124,7 +921,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-bottom-color: #D3D3D3;
 }
 
-#rfrvrcekei .gt_footnotes {
+#janqwjtfzn .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1138,7 +935,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-right-color: #D3D3D3;
 }
 
-#rfrvrcekei .gt_footnote {
+#janqwjtfzn .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1147,7 +944,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   padding-right: 5px;
 }
 
-#rfrvrcekei .gt_sourcenotes {
+#janqwjtfzn .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1161,7 +958,7 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   border-right-color: #D3D3D3;
 }
 
-#rfrvrcekei .gt_sourcenote {
+#janqwjtfzn .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1169,60 +966,60 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
   padding-right: 5px;
 }
 
-#rfrvrcekei .gt_left {
+#janqwjtfzn .gt_left {
   text-align: left;
 }
 
-#rfrvrcekei .gt_center {
+#janqwjtfzn .gt_center {
   text-align: center;
 }
 
-#rfrvrcekei .gt_right {
+#janqwjtfzn .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rfrvrcekei .gt_font_normal {
+#janqwjtfzn .gt_font_normal {
   font-weight: normal;
 }
 
-#rfrvrcekei .gt_font_bold {
+#janqwjtfzn .gt_font_bold {
   font-weight: bold;
 }
 
-#rfrvrcekei .gt_font_italic {
+#janqwjtfzn .gt_font_italic {
   font-style: italic;
 }
 
-#rfrvrcekei .gt_super {
+#janqwjtfzn .gt_super {
   font-size: 65%;
 }
 
-#rfrvrcekei .gt_footnote_marks {
+#janqwjtfzn .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#rfrvrcekei .gt_asterisk {
+#janqwjtfzn .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#rfrvrcekei .gt_slash_mark {
+#janqwjtfzn .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#rfrvrcekei .gt_fraction_numerator {
+#janqwjtfzn .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#rfrvrcekei .gt_fraction_denominator {
+#janqwjtfzn .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -1248,47 +1045,47 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
 <tr>
 <td class="gt_row gt_left">investigación</td>
 <td class="gt_row gt_right">24.71%</td>
-<td class="gt_row gt_right">22.22%</td>
+<td class="gt_row gt_right">21.33%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">encuesta</td>
 <td class="gt_row gt_right">12.94%</td>
-<td class="gt_row gt_right">9.72%</td>
+<td class="gt_row gt_right">9.33%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">método</td>
 <td class="gt_row gt_right">11.76%</td>
-<td class="gt_row gt_right">12.50%</td>
+<td class="gt_row gt_right">13.33%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">estadística</td>
 <td class="gt_row gt_right">10.59%</td>
-<td class="gt_row gt_right">12.50%</td>
+<td class="gt_row gt_right">12.00%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">numeros</td>
 <td class="gt_row gt_right">7.06%</td>
-<td class="gt_row gt_right">5.56%</td>
+<td class="gt_row gt_right">5.33%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">cantidad</td>
 <td class="gt_row gt_right">5.88%</td>
-<td class="gt_row gt_right">5.56%</td>
+<td class="gt_row gt_right">6.67%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">datos</td>
 <td class="gt_row gt_right">4.71%</td>
-<td class="gt_row gt_right">6.94%</td>
+<td class="gt_row gt_right">6.67%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">porcentaje</td>
 <td class="gt_row gt_right">2.35%</td>
-<td class="gt_row gt_right">5.56%</td>
+<td class="gt_row gt_right">5.33%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">conocimiento</td>
 <td class="gt_row gt_right">3.53%</td>
-<td class="gt_row gt_right">4.17%</td>
+<td class="gt_row gt_right">4.00%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">contar</td>
@@ -1301,9 +1098,14 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
 <td class="gt_row gt_right">NA</td>
 </tr>
 <tr>
+<td class="gt_row gt_left">científico</td>
+<td class="gt_row gt_right">NA</td>
+<td class="gt_row gt_right">4.00%</td>
+</tr>
+<tr>
 <td class="gt_row gt_left">herramientas</td>
 <td class="gt_row gt_right">NA</td>
-<td class="gt_row gt_right">4.17%</td>
+<td class="gt_row gt_right">4.00%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">difícil</td>
@@ -1326,49 +1128,23 @@ cuanti_palabras_pre_stem <span class="op">=</span> <span class="fu"><a href="htt
 <td class="gt_row gt_right">NA</td>
 </tr>
 <tr>
-<td class="gt_row gt_left">científico</td>
-<td class="gt_row gt_right">NA</td>
-<td class="gt_row gt_right">2.78%</td>
-</tr>
-<tr>
 <td class="gt_row gt_left">estudios</td>
 <td class="gt_row gt_right">NA</td>
-<td class="gt_row gt_right">2.78%</td>
+<td class="gt_row gt_right">2.67%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">objetivos</td>
 <td class="gt_row gt_right">NA</td>
-<td class="gt_row gt_right">2.78%</td>
+<td class="gt_row gt_right">2.67%</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">practica</td>
 <td class="gt_row gt_right">NA</td>
-<td class="gt_row gt_right">2.78%</td>
+<td class="gt_row gt_right">2.67%</td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">conteo_palabras_grupo</span> <span class="op">&lt;-</span> <span class="va">df_longer</span> |&gt;
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span><span class="op">)</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">unaj_n_materias_aprobadas_15</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">cuanti_palabras_pre_stem</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Porcentaje <span class="op">=</span> <span class="va">n</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span>
-
- <span class="va">nube_palabras_grupo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">conteo_palabras_grupo</span>, 
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">cuanti_palabras_pre_stem</span>, 
-           size <span class="op">=</span> <span class="va">n</span>,
-           color <span class="op">=</span> <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://lepennec.github.io/ggwordcloud/reference/geom_text_wordcloud.html">geom_text_wordcloud</a></span><span class="op">(</span>area_corr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html">scale_size_area</a></span><span class="op">(</span>max_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Nube de palabra según cantidad de materias aprobadas"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">unaj_n_materias_aprobadas_15</span><span class="op">)</span>
- 
- <span class="va">nube_palabras_grupo</span></code></pre></div>
 <div class="inline-figure"><img src="cuanti_analisis_datos_files/figure-html/nube_palabras_grupo-1.png" width="672"></div>
 </div>
 <div id="section" class="section level2" number="4.5">

@@ -4,7 +4,7 @@
 
 # Análisis de redes
 
-```{r librerias_redes}
+```{r librerias_redes, include=FALSE}
 library(tidygraph)
 library(ggraph)
 library(stringr)
@@ -13,7 +13,7 @@ library(here)
            
 ```
 
-```{r insumo_redes}
+```{r insumo_redes, include=FALSE}
 # Levanto el dataset de la encuesta
 # Pongo "redes_tu_nombre"como primera columna
 df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds")) |>
@@ -36,12 +36,12 @@ Luego de una primera pregunta en donde el estudiante se auto identifica en la li
 
 ## Breve introducción al análisis de redes
 
-```{r nodes}
+```{r nodes, include=FALSE}
 nodes <- df_encuesta
 
 ```
 
-```{r edges}
+```{r edges, include=FALSE}
 # Hay que realizar desde el archivo de la encuesta dos columnas (from, to) en donde
 # el "from" sea el encuestado "redes_tun_nombre" y que el "to" sea el estudiante a quien haya 
 # elegido. Dado que cada encuestado elige a 5 estudiantes en este nuevo objeto debería
@@ -87,7 +87,7 @@ mutate(intensidad_relacion = as.integer(case_when(orden_del_contacto == "redes_1
           
 ```
 
-```{r red}
+```{r red, include=FALSE}
 # Creo la red 
 red <- tbl_graph(nodes = nodes,
                  node_key = "redes_tu_nombre",
@@ -109,7 +109,7 @@ Recién luego de varias décadas la visualización del sociograma se relacionó 
 
 En un grafo, los nodos (*nodes*) representan a los entes relacionados (aquí estudiantes) y las líneas (*edges*) representan a las relaciones entre ellos. En este caso primero vamos a calcular una medida de centralidad de los nodos en función de las relaciones que cada uno tiene y con quién. En este sentido, no es lo mismo conocer a 5 personas que son pocos conocidos que conocer a 5 personas que son muy conocidas por otros. En el casos de las relaciones vamos a calcular otra medida de centralidad basada en la idea de intermediación . [^redes-2]
 
-```{r red_diego}
+```{r red_diego, include=FALSE}
 red_diego <- red |>
 activate(nodes) |>
 filter(cuanti_docente == "Diego Quartulli") |>
@@ -121,7 +121,7 @@ activate(edges) |>
 mutate(intermediacion = centrality_edge_betweenness())
 ```
 
-```{r grafo_comision_diego}
+```{r grafo_comision_diego, echo=FALSE, message=FALSE, warning=FALSE}
 
 grafo_diego <- ggraph(red_diego, layout = "kk") +
 geom_edge_link(aes(alpha = intermediacion)) + 
@@ -136,9 +136,7 @@ ggsave(here("Outputs", "grafo_diego.png"))
 # http://users.dimi.uniud.it/~massimo.franceschet/ns/syllabus/make/tidygraph/tidygraph.html
 ```
 
-En el siguiente grafo
-
-```{r}
+```{r include=FALSE}
 nodos <- red_diego |>
 activate(nodes) |>
 as_tibble()
@@ -152,7 +150,7 @@ as_tibble()
       geom_node_point(aes(colour = community), size = 5) + 
       theme_graph()
 
-```{r comunidad_diego}
+```{r comunidad_diego, include=FALSE}
 comunidad_diego <- ggraph(red_diego, layout = "kk") + 
   geom_edge_link(aes(alpha = stat(index)), show.legend = FALSE) + 
   geom_node_point(aes(colour = comunidad), size = 5) +

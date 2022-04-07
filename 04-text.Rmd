@@ -1,6 +1,6 @@
 # Análisis de textos
 
-```{r text_librerias}
+```{r text_librerias, include=FALSE}
 # Levanto el dataset de la encuesta
 
 library(stringr)
@@ -13,7 +13,7 @@ library(tidyverse)
            
 ```
 
-```{r text_insumo}
+```{r text_insumo, include=FALSE}
 # Levanto el dataset de la encuesta
 
 df_encuesta <- read_rds(here::here("Outputs", "df_encuesta.rds"))
@@ -29,7 +29,7 @@ En este caso, como puede observarse en la imagen se trata de 3 palabras por cada
 
 Para facilitar el siguiente análisis lo que primero debemos realizar es un "alargamiento" de la base de datos original para pasar a tener una sola columna y más filas que, en principio, se repetirían 3 veces.
 
-```{r text_longer}
+```{r text_longer, include=FALSE}
 
 df_longer <- df_encuesta |>
              select(dni, 
@@ -51,7 +51,7 @@ df_longer <- df_encuesta |>
 
 Luego, sigue el proceso de limpieza de las palabras. Se pasa todo a minúscula, se eliminan los puntos, los números y toda palabra vacía de significado como los pronombres, artículos y preposiciones. Finalmente se hace un proceso en donde se intenta llevar todas las palabras a su raíz (*stemming*) para así poder interpretar como una misma palabra a palabras que, por ejemplo, cambian el género (gato, gata) o el número (gato, gatos). Ahora sí, ya estamos en mejores condiciones de empezar nuestro análisis del texto.
 
-```{r cleaning_palabras_cuanti}
+```{r cleaning_palabras_cuanti, include=FALSE}
 
 # Comienzo el proceso de transformación desde cuanti_palabras a cuanti_palabras_ok
 # Se sacan los puntos
@@ -156,7 +156,7 @@ cuanti_palabras_pre_stem = str_replace(cuanti_palabras_pre_stem, "cuentas", "con
 
 Dado que los pasos anteriores nos permitieron estructurar bastante los datos, ahora es más fácil realizar los típicos análisis que se realizan a los datos estructurados. Para comenzar vamos a realizar una simple tabla de conteo, con su respectivo porcentaje, y luego vamos a realizar un gráfico de barras. Finalmente realizaremos una nube de palabras.
 
-```{r tablas_conteos}
+```{r tablas_conteos, echo=FALSE}
 
 library(dplyr)
 library(gt)
@@ -183,7 +183,7 @@ gt_palabras
 
 Como en muchas otras situaciones, lo que se puede mostrar en forma de tabla también se puede graficar con algún tipo de gráfico. En este caso haremos un gráfico de barras con los datos anteriores.
 
-```{r grafico_conteo}
+```{r grafico_conteo, echo=FALSE}
 library(ggplot2)
 
 grafico_conteo <- conteo_palabras_general |>
@@ -201,7 +201,7 @@ grafico_conteo
 
 La nube de palabras es una técnica de visualización que funciona bien cuando los insumos son palabras y estan presentan una gran heterogeneidad en los valores de sus frecuencias.
 
-```{r text_nube_general}
+```{r text_nube_general, echo=FALSE}
 
 library(ggwordcloud)
 
@@ -219,7 +219,7 @@ nube_palabras
 
 ## Análisis bivariado de palabras
 
-```{r text_bivariado}
+```{r text_bivariado, echo=FALSE}
 # Es más cómodo "ensanchar" la base luego del análisis para facilitar la tabla
 
 conteo_palabras_grupo <- df_longer |>
@@ -246,7 +246,7 @@ gt_palabras_grupo <- conteo_palabras_grupo |>
 gt_palabras_grupo
 ```
 
-```{r nube_palabras_grupo}
+```{r nube_palabras_grupo, echo=FALSE}
 
 conteo_palabras_grupo <- df_longer |>
 filter(!is.na(cuanti_palabras_pre_stem)) |>
